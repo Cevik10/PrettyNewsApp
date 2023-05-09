@@ -49,4 +49,104 @@
             app:popEnterAnim="@transition/slide_in_left"
             app:popExitAnim="@transition/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.hakancevik.newsappbihaber.view.CategoriesFragment"
+        android:label="fragment_categories"
+        tools:layout="@layout/fragment_categories">
+        <action
+            android:id="@+id/action_categoriesFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/businessFragment"
+        android:name="com.hakancevik.newsappbihaber.view.tabbed.BusinessFragment"
+        android:label="fragment_business"
+        tools:layout="@layout/fragment_business">
+        <action
+            android:id="@+id/action_businessFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"
+            app:popEnterAnim="@transition/slide_in_left"
+            app:popExitAnim="@transition/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/entertainmentFragment"
+        android:name="com.hakancevik.newsappbihaber.view.tabbed.EntertainmentFragment"
+        android:label="fragment_entertainment"
+        tools:layout="@layout/fragment_entertainment">
+        <action
+            android:id="@+id/action_entertainmentFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"
+            app:popEnterAnim="@transition/slide_in_left"
+            app:popExitAnim="@transition/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/generalFragment2"
+        android:name="com.hakancevik.newsappbihaber.view.tabbed.GeneralFragment"
+        android:label="fragment_general"
+        tools:layout="@layout/fragment_general">
+        <action
+            android:id="@+id/action_generalFragment2_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"
+            app:popEnterAnim="@transition/slide_in_left"
+            app:popExitAnim="@transition/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/healthFragment"
+        android:name="com.hakancevik.newsappbihaber.view.tabbed.HealthFragment"
+        android:label="fragment_health"
+        tools:layout="@layout/fragment_health">
+        <action
+            android:id="@+id/action_healthFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"
+            app:popEnterAnim="@transition/slide_in_left"
+            app:popExitAnim="@transition/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/scienceFragment"
+        android:name="com.hakancevik.newsappbihaber.view.tabbed.ScienceFragment"
+        android:label="fragment_science"
+        tools:layout="@layout/fragment_science">
+        <action
+            android:id="@+id/action_scienceFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"
+            app:popEnterAnim="@transition/slide_in_left"
+            app:popExitAnim="@transition/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/sportsFragment"
+        android:name="com.hakancevik.newsappbihaber.view.tabbed.SportsFragment"
+        android:label="fragment_sports"
+        tools:layout="@layout/fragment_sports">
+        <action
+            android:id="@+id/action_sportsFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"
+            app:popEnterAnim="@transition/slide_in_left"
+            app:popExitAnim="@transition/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/technologyFragment"
+        android:name="com.hakancevik.newsappbihaber.view.tabbed.TechnologyFragment"
+        android:label="fragment_technology"
+        tools:layout="@layout/fragment_technology">
+        <action
+            android:id="@+id/action_technologyFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"
+            app:popEnterAnim="@transition/slide_in_left"
+            app:popExitAnim="@transition/slide_out_right" />
+    </fragment>
 </navigation>
