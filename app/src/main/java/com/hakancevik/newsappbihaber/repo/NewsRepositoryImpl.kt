@@ -6,6 +6,7 @@ import com.hakancevik.newsappbihaber.model.Article
 import com.hakancevik.newsappbihaber.model.NewsResponse
 import com.hakancevik.newsappbihaber.roomdb.NewsDao
 import com.hakancevik.newsappbihaber.util.Resource
+import retrofit2.Response
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
@@ -13,6 +14,10 @@ class NewsRepositoryImpl @Inject constructor(
     private val newsAPI: NewsAPI
 
 ) : NewsRepository {
+    override suspend fun getBreakingNews(countryCode: String, pageNumber: Int): Response<NewsResponse> {
+        return newsAPI.getBreakingNews(countryCode, pageNumber)
+    }
+
 
     override suspend fun insertArticle(article: Article) {
         newsDao.insertArticle(article)
@@ -27,18 +32,22 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchNews(newsString: String): Resource<NewsResponse> {
-        return try {
-            val response = newsAPI.searchForNews(newsString)
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    return@let Resource.success(it)
-                } ?: Resource.error("Error", null)
-            } else {
-                Resource.error("Error", null)
-            }
-
-        } catch (e: Exception) {
-            Resource.error("No Data!", null)
-        }
+        TODO("Not yet implemented")
     }
+
+//    override suspend fun searchNews(newsString: String): Resource<NewsResponse> {
+//        return try {
+//            val response = newsAPI.searchForNews(newsString)
+//            if (response.isSuccessful) {
+//                response.body()?.let {
+//                    return@let Resource.success(it)
+//                } ?: Resource.error("Error", null)
+//            } else {
+//                Resource.error("Error", null)
+//            }
+//
+//        } catch (e: Exception) {
+//            Resource.error("No Data!", null)
+//        }
+//    }
 }

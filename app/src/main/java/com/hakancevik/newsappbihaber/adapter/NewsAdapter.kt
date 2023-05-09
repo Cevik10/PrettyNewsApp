@@ -28,7 +28,7 @@ class NewsAdapter @Inject constructor(
 
     }
 
-    private val differ = AsyncListDiffer(this, diffUtil)
+    val differ = AsyncListDiffer(this, diffUtil)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
