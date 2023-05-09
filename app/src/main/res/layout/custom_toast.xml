@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/custom_toast_constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_round"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="@dimen/custom_toast_icon_size"
+        android:layout_height="@dimen/custom_toast_icon_size"
+        android:layout_margin="@dimen/custom_toast_margin"
+        app:srcCompat="@drawable/info_icon" />
+
+    <TextView
+        android:id="@+id/custom_toast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_toast_margin"
+        android:gravity="center"
+        android:textSize="@dimen/custom_size"
+        android:textStyle="bold" />
+
+</LinearLayout>
