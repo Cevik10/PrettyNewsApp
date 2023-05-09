@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".view.tabbed.BusinessFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewBusiness"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:listitem="@layout/recycler_row_news"
+        />
+
 
 </FrameLayout>
