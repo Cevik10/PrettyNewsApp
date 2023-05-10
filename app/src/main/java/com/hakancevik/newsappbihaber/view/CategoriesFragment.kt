@@ -28,6 +28,7 @@ class CategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         tabLayout = view.findViewById(R.id.tabLayout)
         viewPager2 = view.findViewById(R.id.viewPager2)
         viewPagerAdapter = ViewPagerAdapter(childFragmentManager, lifecycle)

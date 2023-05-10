@@ -1,12 +1,17 @@
 package com.hakancevik.newsappbihaber
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.airbnb.lottie.LottieAnimationView
 import com.hakancevik.newsappbihaber.common.NewsFragmentFactory
 
 import com.hakancevik.newsappbihaber.databinding.ActivityMainBinding
+import com.hakancevik.newsappbihaber.util.customToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -28,5 +33,13 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
 
+        binding.toolbarSettings.apply {
+            setOnClickListener {
+                playAnimation()
+            }
+        }
+
+
     }
+
 }
