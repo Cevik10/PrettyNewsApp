@@ -9,10 +9,55 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSavedNews"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/recycler_row_news" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/savedNewsInfoLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32999998">
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/savedNewsAnim"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/search_news_anim"
+            tools:layout_editor_absoluteX="55dp"
+            tools:layout_editor_absoluteY="179dp" />
+
+        <TextView
+            android:id="@+id/infoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:text="The news you have \n saved will appear here."
+            android:textAlignment="center"
+            android:textSize="21sp"
+            android:visibility="visible" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

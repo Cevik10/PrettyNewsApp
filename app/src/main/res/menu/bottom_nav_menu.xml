@@ -5,12 +5,14 @@
     <item
         android:id="@+id/breakingNewsFragment"
         android:icon="@drawable/ic_newspaper_selector"
-        android:title="Breaking News" />
+        android:title="Breaking News"
+        />
 
     <item
         android:id="@+id/categoriesFragment"
         android:icon="@drawable/ic_categories_selector"
-        android:title="Categories" />
+        android:title="Categories"
+        />
 
 
     <item

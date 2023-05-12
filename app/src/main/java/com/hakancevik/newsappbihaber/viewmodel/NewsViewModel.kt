@@ -88,6 +88,7 @@ class NewsViewModel @Inject constructor(
 
     fun saveArticle(article: Article) = viewModelScope.launch {
         repository.insertArticle(article)
+        savedNewsInfo.value = false
     }
 
     fun deleteArticle(article: Article) = viewModelScope.launch {
@@ -97,6 +98,9 @@ class NewsViewModel @Inject constructor(
     fun getSavedNews(): LiveData<List<Article>> {
         return repository.getSavedNews()
     }
+
+
+    val savedNewsInfo = MutableLiveData<Boolean>()
 
 
 }

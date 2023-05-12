@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
 
+
+
 //        binding.toolbarSettings.apply {
 //            setOnClickListener {
 //                playAnimation()

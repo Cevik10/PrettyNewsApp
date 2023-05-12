@@ -16,6 +16,9 @@ import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 
 import com.hakancevik.newsappbihaber.databinding.FragmentSavedNewsBinding
+import com.hakancevik.newsappbihaber.util.gone
+import com.hakancevik.newsappbihaber.util.hide
+import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 import javax.inject.Inject
 
@@ -87,7 +90,23 @@ class SavedNewsFragment @Inject constructor(
         }
 
         viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { articles ->
-            newsAdapter.differ.submitList(articles)
+            if (articles.isEmpty()) {
+                viewModel.savedNewsInfo.value = true
+                newsAdapter.differ.submitList(articles)
+            } else {
+                newsAdapter.differ.submitList(articles)
+                viewModel.savedNewsInfo.value = false
+            }
+        })
+
+        viewModel.savedNewsInfo.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.recyclerViewSavedNews.hide()
+                binding.savedNewsInfoLayout.show()
+            } else {
+                binding.recyclerViewSavedNews.show()
+                binding.savedNewsInfoLayout.hide()
+            }
         })
 
 

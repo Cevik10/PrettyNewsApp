@@ -24,10 +24,7 @@
         <action
             android:id="@+id/action_breakingNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+           />
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
@@ -37,10 +34,7 @@
         <action
             android:id="@+id/action_savedNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+          />
     </fragment>
     <fragment
         android:id="@+id/searchNewsFragment"
@@ -50,10 +44,7 @@
         <action
             android:id="@+id/action_searchNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+           />
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
@@ -68,10 +59,7 @@
         <action
             android:id="@+id/action_businessFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+          />
     </fragment>
     <fragment
         android:id="@+id/entertainmentFragment"
@@ -81,10 +69,7 @@
         <action
             android:id="@+id/action_entertainmentFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+          />
     </fragment>
     <fragment
         android:id="@+id/generalFragment2"
@@ -94,10 +79,7 @@
         <action
             android:id="@+id/action_generalFragment2_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+     />
     </fragment>
     <fragment
         android:id="@+id/healthFragment"
@@ -107,10 +89,7 @@
         <action
             android:id="@+id/action_healthFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+           />
     </fragment>
     <fragment
         android:id="@+id/scienceFragment"
@@ -120,10 +99,7 @@
         <action
             android:id="@+id/action_scienceFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+       />
     </fragment>
     <fragment
         android:id="@+id/sportsFragment"
@@ -133,10 +109,7 @@
         <action
             android:id="@+id/action_sportsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+         />
     </fragment>
     <fragment
         android:id="@+id/technologyFragment"
@@ -146,9 +119,6 @@
         <action
             android:id="@+id/action_technologyFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"
-            app:popEnterAnim="@transition/slide_in_left"
-            app:popExitAnim="@transition/slide_out_right" />
+      />
     </fragment>
 </navigation>
