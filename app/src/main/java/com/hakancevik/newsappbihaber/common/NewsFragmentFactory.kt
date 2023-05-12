@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class NewsFragmentFactory @Inject constructor(
     private val newsAdapter: NewsAdapter,
-    private val glide: RequestManager
+    val glide: RequestManager
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
