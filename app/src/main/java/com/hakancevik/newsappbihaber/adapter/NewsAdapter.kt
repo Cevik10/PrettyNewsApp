@@ -2,16 +2,20 @@ package com.hakancevik.newsappbihaber.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.hakancevik.newsappbihaber.databinding.RecyclerRowNewsBinding
 import com.hakancevik.newsappbihaber.model.Article
+import com.hakancevik.newsappbihaber.repo.NewsRepository
+import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 import javax.inject.Inject
 
 class NewsAdapter @Inject constructor(
     private val glide: RequestManager
+
 ) : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     inner class ArticleViewHolder(val binding: RecyclerRowNewsBinding) : RecyclerView.ViewHolder(binding.root)
@@ -41,6 +45,8 @@ class NewsAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+
+
         val article = differ.currentList[position]
 
         holder.itemView.apply {
@@ -49,6 +55,7 @@ class NewsAdapter @Inject constructor(
             holder.binding.titleText.text = article.title
             holder.binding.descriptionText.text = article.description
             holder.binding.publishedAtText.text = article.publishedAt
+
 
             setOnClickListener {
                 onItemClickListener?.let {
@@ -65,5 +72,9 @@ class NewsAdapter @Inject constructor(
     fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
     }
+
+
+
+
 
 }

@@ -18,6 +18,10 @@ class NewsRepositoryImpl @Inject constructor(
         return newsAPI.getBreakingNews(countryCode, pageNumber)
     }
 
+    override suspend fun searchNews(searchQuery: String, pageNumber: Int): Response<NewsResponse> {
+        return newsAPI.searchForNews(searchQuery, pageNumber)
+    }
+
 
     override suspend fun insertArticle(article: Article) {
         newsDao.insertArticle(article)
@@ -27,27 +31,10 @@ class NewsRepositoryImpl @Inject constructor(
         newsDao.deleteArticle(article)
     }
 
-    override fun getAllArticle(): LiveData<List<Article>> {
+    override fun getSavedNews(): LiveData<List<Article>> {
         return newsDao.getAllArticles()
     }
 
-    override suspend fun searchNews(newsString: String): Resource<NewsResponse> {
-        TODO("Not yet implemented")
-    }
 
-//    override suspend fun searchNews(newsString: String): Resource<NewsResponse> {
-//        return try {
-//            val response = newsAPI.searchForNews(newsString)
-//            if (response.isSuccessful) {
-//                response.body()?.let {
-//                    return@let Resource.success(it)
-//                } ?: Resource.error("Error", null)
-//            } else {
-//                Resource.error("Error", null)
-//            }
-//
-//        } catch (e: Exception) {
-//            Resource.error("No Data!", null)
-//        }
-//    }
+
 }

@@ -9,7 +9,13 @@
         android:id="@+id/articleFragment"
         android:name="com.hakancevik.newsappbihaber.view.ArticleFragment"
         android:label="fragment_article"
-        tools:layout="@layout/fragment_article" />
+        tools:layout="@layout/fragment_article" >
+
+
+        <argument
+            android:name="article"
+            app:argType="com.hakancevik.newsappbihaber.model.Article" />
+    </fragment>
     <fragment
         android:id="@+id/breakingNewsFragment"
         android:name="com.hakancevik.newsappbihaber.view.BreakingNewsFragment"
@@ -53,11 +59,7 @@
         android:id="@+id/categoriesFragment"
         android:name="com.hakancevik.newsappbihaber.view.CategoriesFragment"
         android:label="fragment_categories"
-        tools:layout="@layout/fragment_categories">
-        <action
-            android:id="@+id/action_categoriesFragment_to_articleFragment"
-            app:destination="@id/articleFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_categories"/>
     <fragment
         android:id="@+id/businessFragment"
         android:name="com.hakancevik.newsappbihaber.view.tabbed.BusinessFragment"

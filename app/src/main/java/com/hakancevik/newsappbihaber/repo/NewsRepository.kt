@@ -10,13 +10,13 @@ interface NewsRepository {
 
     suspend fun getBreakingNews(countryCode: String, pageNumber: Int): Response<NewsResponse>
 
+    suspend fun searchNews(searchQuery: String, pageNumber: Int): Response<NewsResponse>
+
     suspend fun insertArticle(article: Article)
 
     suspend fun deleteArticle(article: Article)
 
-    fun getAllArticle(): LiveData<List<Article>>
-
-    suspend fun searchNews(newsString: String): Resource<NewsResponse>
+    fun getSavedNews(): LiveData<List<Article>>
 
 
 }

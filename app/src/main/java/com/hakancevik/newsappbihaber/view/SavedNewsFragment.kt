@@ -5,22 +5,50 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.NewsAdapter
-import com.hakancevik.newsappbihaber.databinding.FragmentBreakingNewsBinding
+
 import com.hakancevik.newsappbihaber.databinding.FragmentSavedNewsBinding
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 import javax.inject.Inject
 
 class SavedNewsFragment @Inject constructor(
-    val newsAdapter: NewsAdapter
+    private val newsAdapter: NewsAdapter
 ) : Fragment() {
 
     private var _binding: FragmentSavedNewsBinding? = null
     private val binding get() = _binding!!
 
     lateinit var viewModel: NewsViewModel
+
+    private val swipeCallBack = object : ItemTouchHelper.SimpleCallback(
+        0,
+        ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+    ) {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            return true
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val layoutPosition = viewHolder.layoutPosition
+            val selectedArticle = newsAdapter.differ.currentList[layoutPosition]
+            viewModel.deleteArticle(selectedArticle)
+            Snackbar.make(requireView(), "Succesfully deleted.", Snackbar.LENGTH_SHORT).apply {
+                setAction("undo") {
+                    viewModel.saveArticle(selectedArticle)
+                }
+                show()
+            }
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +63,34 @@ class SavedNewsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+
+
+        binding.recyclerViewSavedNews.apply {
+            adapter = newsAdapter
+            layoutManager = LinearLayoutManager(activity)
+            newsAdapter.differ.submitList(arrayListOf())
+        }
+
+        ItemTouchHelper(swipeCallBack).attachToRecyclerView(binding.recyclerViewSavedNews)
+
+
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+
+            findNavController().navigate(
+                R.id.action_savedNewsFragment_to_articleFragment,
+                bundle
+            )
+        }
+
+        viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { articles ->
+            newsAdapter.differ.submitList(articles)
+        })
+
+
     }
 
     override fun onDestroyView() {

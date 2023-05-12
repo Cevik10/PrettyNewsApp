@@ -5,10 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.databinding.FragmentArticleBinding
 import com.hakancevik.newsappbihaber.databinding.FragmentBreakingNewsBinding
+import com.hakancevik.newsappbihaber.util.customToast
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 
 
@@ -19,6 +26,7 @@ class ArticleFragment : Fragment() {
     private val binding get() = _binding!!
 
     lateinit var viewModel: NewsViewModel
+    private val args: ArticleFragmentArgs by navArgs()
 
 
     override fun onCreateView(
@@ -34,7 +42,31 @@ class ArticleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+
+        val article = args.article
+        binding.webView.apply {
+            webViewClient = WebViewClient()
+            article.url?.let { loadUrl(it) }
+        }
+
+
+        binding.fab.setOnClickListener {
+
+            viewModel.saveArticle(article)
+            activity?.customToast("Successfully saved.")
+
+        }
+
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack(R.id.articleFragment, true)
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
+
 
     }
 
