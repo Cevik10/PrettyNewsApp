@@ -11,10 +11,14 @@
         android:label="fragment_article"
         tools:layout="@layout/fragment_article" >
 
-
         <argument
             android:name="article"
             app:argType="com.hakancevik.newsappbihaber.model.Article" />
+        <argument
+            android:name="routeKey"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
     </fragment>
     <fragment
         android:id="@+id/breakingNewsFragment"

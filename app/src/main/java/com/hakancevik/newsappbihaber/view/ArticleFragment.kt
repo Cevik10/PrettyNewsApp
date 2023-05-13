@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +27,10 @@ class ArticleFragment : Fragment() {
     private val binding get() = _binding!!
 
     lateinit var viewModel: NewsViewModel
+
     private val args: ArticleFragmentArgs by navArgs()
+
+    private var routeKey = -1
 
 
     override fun onCreateView(
@@ -51,6 +55,7 @@ class ArticleFragment : Fragment() {
         }
 
 
+
         binding.fab.setOnClickListener {
 
             viewModel.saveArticle(article)
@@ -58,20 +63,27 @@ class ArticleFragment : Fragment() {
 
         }
 
-
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack(R.id.articleFragment, true)
-            }
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
+//        val callback = object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                findNavController().popBackStack()
+//            }
+//        }
+//        requireActivity().onBackPressedDispatcher.addCallback(callback)
 
 
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        routeKey = args.routeKey
+
+        if (routeKey != -1) {
+            findNavController().clearBackStack(routeKey)
+        }
+
+
     }
 }

@@ -10,16 +10,15 @@ import android.widget.AbsListView
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.NewsAdapter
-import com.hakancevik.newsappbihaber.databinding.FragmentBreakingNewsBinding
-import com.hakancevik.newsappbihaber.databinding.FragmentSavedNewsBinding
+import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentSearchNewsBinding
-import com.hakancevik.newsappbihaber.util.Constants
+import com.hakancevik.newsappbihaber.util.Constants.QUERY_PAGE_SIZE
 import com.hakancevik.newsappbihaber.util.Resource
 import com.hakancevik.newsappbihaber.util.customToast
 import com.hakancevik.newsappbihaber.util.hide
@@ -32,7 +31,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchNewsFragment @Inject constructor(
-    private val newsAdapter: NewsAdapter
+    private val searchNewsAdapter: SearchNewsAdapter
 ) : Fragment() {
 
     private var _binding: FragmentSearchNewsBinding? = null
@@ -55,21 +54,25 @@ class SearchNewsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
-
         setupRecyclerView()
 
 
+        searchNewsAdapter.setOnItemClickListener {
+            //            val bundle = Bundle().apply {
+            //                putSerializable("article", it)
+            //                putInt("routeKey", R.id.searchNewsFragment)
+            //            }
+            //
+            //            findNavController().navigate(
+            //                R.id.action_searchNewsFragment_to_articleFragment,
+            //                bundle
+            //            )
 
 
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article", it)
-            }
+            val action = SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it, R.id.searchNewsFragment)
+            findNavController().navigate(action)
 
-            findNavController().navigate(
-                R.id.action_searchNewsFragment_to_articleFragment,
-                bundle
-            )
+
         }
 
 
@@ -80,7 +83,7 @@ class SearchNewsFragment @Inject constructor(
                 delay(600L)
                 editable?.let {
                     if (editable.toString().isNotEmpty()) {
-                        viewModel.searchNews(editable.toString())
+                        viewModel.searchNews(editable.toString().trim())
                     }
                 }
             }
@@ -88,6 +91,7 @@ class SearchNewsFragment @Inject constructor(
 
         binding.clearSearchEditText.setOnClickListener {
             binding.searchViewEditText.text.clear()
+            searchNewsAdapter.differ.submitList(arrayListOf())
         }
 
         viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
@@ -96,10 +100,10 @@ class SearchNewsFragment @Inject constructor(
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles?.toList())
+                        searchNewsAdapter.differ.submitList(newsResponse.articles?.toList())
 
                         if (newsResponse.totalResults != null) {
-                            val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
+                            val totalPages = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
                             isLastPage = viewModel.searchNewsPage == totalPages
                             if (isLastPage) {
                                 binding.recyclerViewSearchNews.setPadding(0, 0, 0, 0)
@@ -153,7 +157,7 @@ class SearchNewsFragment @Inject constructor(
             val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
             val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
             val isNotAtBeginning = firstVisibleItemPosition >= 0
-            val isTotalMoreThanVisible = totalItemCount >= Constants.QUERY_PAGE_SIZE
+            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
 
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
@@ -174,10 +178,10 @@ class SearchNewsFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         binding.recyclerViewSearchNews.apply {
-            adapter = newsAdapter
-            layoutManager = LinearLayoutManager(activity)
+            adapter = searchNewsAdapter
+            layoutManager = GridLayoutManager(activity, 2)
             addOnScrollListener(this@SearchNewsFragment.scrollListener)
-            newsAdapter.differ.submitList(arrayListOf())
+            searchNewsAdapter.differ.submitList(arrayListOf())
         }
     }
 

@@ -55,19 +55,28 @@ class BreakingNewsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
         setupRecyclerView()
 
 
         newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article", it)
-            }
+//            val bundle = Bundle().apply {
+//                putSerializable("article", it)
+//                putInt("routeKey", R.id.breakingNewsFragment)
+//            }
+//
+//
+//            findNavController().navigate(
+//                R.id.action_breakingNewsFragment_to_articleFragment,
+//                bundle
+//            )
 
-            findNavController().navigate(
-                R.id.action_breakingNewsFragment_to_articleFragment,
-                bundle
-            )
+
+            val action = BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it, R.id.breakingNewsFragment)
+            findNavController().navigate(action)
+
+
         }
 
 

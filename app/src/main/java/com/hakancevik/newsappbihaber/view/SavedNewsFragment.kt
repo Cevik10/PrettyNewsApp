@@ -66,6 +66,7 @@ class SavedNewsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
 
 
@@ -79,14 +80,23 @@ class SavedNewsFragment @Inject constructor(
 
 
         newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article", it)
-            }
+//            val bundle = Bundle().apply {
+//                putSerializable("article", it)
+//                putInt("routeKey", R.id.savedNewsFragment)
+//            }
+//
+//            findNavController().navigate(
+//                R.id.action_savedNewsFragment_to_articleFragment,
+//                bundle
+//            )
 
-            findNavController().navigate(
-                R.id.action_savedNewsFragment_to_articleFragment,
-                bundle
-            )
+
+            val action = SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it,R.id.savedNewsFragment)
+            findNavController().navigate(action)
+//
+
+
+
         }
 
         viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { articles ->

@@ -1,5 +1,6 @@
 package com.hakancevik.newsappbihaber.adapter
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
@@ -8,17 +9,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.hakancevik.newsappbihaber.databinding.RecyclerRowNewsBinding
+import com.hakancevik.newsappbihaber.databinding.RecyclerRowSearchNewsBinding
 import com.hakancevik.newsappbihaber.model.Article
 import com.hakancevik.newsappbihaber.repo.NewsRepository
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 import javax.inject.Inject
 
-class NewsAdapter @Inject constructor(
+class SearchNewsAdapter @Inject constructor(
     private val glide: RequestManager
 
-) : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
+) : RecyclerView.Adapter<SearchNewsAdapter.ArticleViewHolder>() {
 
-    inner class ArticleViewHolder(val binding: RecyclerRowNewsBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ArticleViewHolder(val binding: RecyclerRowSearchNewsBinding) : RecyclerView.ViewHolder(binding.root)
 
 
     private val diffUtil = object : DiffUtil.ItemCallback<Article>() {
@@ -36,7 +38,7 @@ class NewsAdapter @Inject constructor(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-        val binding = RecyclerRowNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RecyclerRowSearchNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ArticleViewHolder(binding)
     }
 
@@ -53,7 +55,6 @@ class NewsAdapter @Inject constructor(
             glide.load(article.urlToImage).into(holder.binding.articleImageView)
             holder.binding.sourceText.text = article.source?.name
             holder.binding.titleText.text = article.title
-            holder.binding.descriptionText.text = article.description
             holder.binding.publishedAtText.text = article.publishedAt
 
 

@@ -1,6 +1,7 @@
 package com.hakancevik.newsappbihaber
 
 import android.os.Bundle
+import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation.findNavController
@@ -27,10 +28,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         val navController = findNavController(this, R.id.fragment)
         binding.bottomNavigationView.setupWithNavController(navController)
-
-
 
 
 //        binding.toolbarSettings.apply {

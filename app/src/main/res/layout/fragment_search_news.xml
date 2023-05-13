@@ -31,7 +31,7 @@
         android:id="@+id/recyclerViewSearchNews"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="13dp"
+        android:layout_margin="9dp"
         android:clipToPadding="false"
         android:elevation="13dp"
         android:paddingBottom="50dp"

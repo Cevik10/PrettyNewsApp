@@ -10,7 +10,6 @@
     app:cardBackgroundColor="#794CAF50"
     app:cardCornerRadius="13dp">
 
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +18,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:padding="7dp"
             app:cardBackgroundColor="#85012667"
             app:cardCornerRadius="0dp">
@@ -30,11 +30,11 @@
 
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/articleImageView"
-                    android:layout_width="173dp"
+                    android:layout_width="0dp"
                     android:layout_height="113dp"
-                    android:layout_marginStart="5dp"
                     android:layout_marginTop="9dp"
                     android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/titleText"
                     app:riv_corner_radius="13dp" />
@@ -51,26 +51,11 @@
                     android:text="TITLE"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/descriptionText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="13dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/lato_regular"
-                    android:maxLines="5"
-                    android:text="DESCRIPTION"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/articleImageView"
-                    app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -81,14 +66,15 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:weightSum="5">
 
             <TextView
                 android:id="@+id/sourceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
                 android:layout_weight="3"
                 android:fontFamily="@font/lato_regular"
                 android:text="SOURCE"
@@ -100,7 +86,8 @@
                 android:id="@+id/publishedAtText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="2"
                 android:fontFamily="@font/lato_regular"
                 android:text="PUBLISHED AT"
@@ -110,6 +97,7 @@
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
