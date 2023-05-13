@@ -1,5 +1,15 @@
 package com.hakancevik.newsappbihaber.viewmodel
 
+import android.net.ConnectivityManager
+import android.net.ConnectivityManager.TYPE_ETHERNET
+import android.net.ConnectivityManager.TYPE_MOBILE
+import android.net.ConnectivityManager.TYPE_WIFI
+import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
+import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
+import android.net.NetworkCapabilities.TRANSPORT_WIFI
+
+import android.os.Build
+
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -13,12 +23,16 @@ import com.hakancevik.newsappbihaber.util.Resource
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+
 import retrofit2.Response
+import java.io.IOException
+
 import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val repository: NewsRepository
+    private val repository: NewsRepository,
+    private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
@@ -34,15 +48,11 @@ class NewsViewModel @Inject constructor(
     }
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
-        breakingNews.postValue(Resource.Loading())
-        val response = repository.getBreakingNews(countryCode, breakingNewsPage)
-        breakingNews.postValue(handleBreakingNewsResponse(response))
+        safeBreakingNewsCall(countryCode)
     }
 
     fun searchNews(searchQuery: String) = viewModelScope.launch {
-        searchNews.postValue(Resource.Loading())
-        val response = repository.searchNews(searchQuery, searchNewsPage)
-        searchNews.postValue(handleSearchNewsResponse(response))
+        safeSearchNewsCall(searchQuery)
     }
 
 
@@ -101,6 +111,68 @@ class NewsViewModel @Inject constructor(
 
 
     val savedNewsInfo = MutableLiveData<Boolean>()
+
+    private suspend fun safeBreakingNewsCall(countryCode: String) {
+        breakingNews.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = repository.getBreakingNews(countryCode, breakingNewsPage)
+                breakingNews.postValue(handleBreakingNewsResponse(response))
+            } else {
+                breakingNews.postValue(Resource.Error("No internet connection"))
+            }
+
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> breakingNews.postValue(Resource.Error("Network Failure"))
+                else -> breakingNews.postValue(Resource.Error("Conversion Error"))
+            }
+
+        }
+    }
+
+    private suspend fun safeSearchNewsCall(searchQuery: String) {
+        searchNews.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = repository.searchNews(searchQuery, searchNewsPage)
+                searchNews.postValue(handleSearchNewsResponse(response))
+            } else {
+                searchNews.postValue(Resource.Error("No internet connection"))
+            }
+
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> searchNews.postValue(Resource.Error("Network Failure"))
+                else -> searchNews.postValue(Resource.Error("Conversion Error"))
+            }
+
+        }
+    }
+
+    private fun hasInternetConnection(): Boolean {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val activeNetwork = connectivityManager.activeNetwork ?: return false
+            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+            return when {
+                capabilities.hasTransport(TRANSPORT_WIFI) -> true
+                capabilities.hasTransport(TRANSPORT_CELLULAR) -> true
+                capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            connectivityManager.activeNetworkInfo?.run {
+                return when (type) {
+                    TYPE_WIFI -> true
+                    TYPE_MOBILE -> true
+                    TYPE_ETHERNET -> true
+                    else -> false
+                }
+            }
+        }
+        return false
+    }
 
 
 }

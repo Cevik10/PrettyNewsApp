@@ -23,7 +23,7 @@ import com.hakancevik.newsappbihaber.databinding.FragmentBreakingNewsBinding
 
 import com.hakancevik.newsappbihaber.util.Constants.QUERY_PAGE_SIZE
 import com.hakancevik.newsappbihaber.util.Resource
-import com.hakancevik.newsappbihaber.util.customToast
+
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
@@ -71,13 +71,12 @@ class BreakingNewsFragment @Inject constructor(
         }
 
 
-
-
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
+                    binding.internetConnectionInfoLayout.hide()
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles?.toList())
 
@@ -96,17 +95,22 @@ class BreakingNewsFragment @Inject constructor(
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
-                        requireActivity().customToast("$message")
+                        binding.internetConnectionInfoLayout.show()
                     }
 
                 }
 
                 is Resource.Loading -> {
+                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
                 }
             }
 
         })
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getBreakingNews("us")
+        }
 
 
     }

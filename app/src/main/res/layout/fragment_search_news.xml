@@ -15,14 +15,13 @@
         android:layout_margin="11dp"
         android:layout_marginTop="60dp"
         android:background="@drawable/bg_search_text"
-        android:backgroundTint="#A3A3A3"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="5dp"
         android:hint="Search news.."
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColor="#3F51B5"
-        android:textColorHint="#D7494949"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,11 +31,14 @@
         android:id="@+id/recyclerViewSearchNews"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="13dp"
         android:clipToPadding="false"
+        android:elevation="13dp"
         android:paddingBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchViewEditText"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchViewEditText" />
 
 
     <ProgressBar
@@ -50,6 +52,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/clearSearchEditText"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_margin="3dp"
+        android:layout_marginEnd="4dp"
+        android:clickable="true"
+        android:contentDescription="@string/clear_text_button"
+        android:foreground="@drawable/ripple_effect"
+        android:src="@drawable/ic_clear"
+        app:layout_constraintBottom_toBottomOf="@+id/searchViewEditText"
+        app:layout_constraintEnd_toEndOf="@+id/searchViewEditText"
+        app:layout_constraintTop_toTopOf="@+id/searchViewEditText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

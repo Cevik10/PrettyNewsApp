@@ -86,6 +86,10 @@ class SearchNewsFragment @Inject constructor(
             }
         }
 
+        binding.clearSearchEditText.setOnClickListener {
+            binding.searchViewEditText.text.clear()
+        }
+
         viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
