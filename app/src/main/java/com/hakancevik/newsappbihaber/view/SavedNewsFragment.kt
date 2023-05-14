@@ -80,15 +80,6 @@ class SavedNewsFragment @Inject constructor(
 
 
         newsAdapter.setOnItemClickListener {
-//            val bundle = Bundle().apply {
-//                putSerializable("article", it)
-//                putInt("routeKey", R.id.savedNewsFragment)
-//            }
-//
-//            findNavController().navigate(
-//                R.id.action_savedNewsFragment_to_articleFragment,
-//                bundle
-//            )
 
 
             val action = SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it,R.id.savedNewsFragment)

@@ -6,8 +6,11 @@ import com.bumptech.glide.RequestManager
 import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.view.BreakingNewsFragment
+import com.hakancevik.newsappbihaber.view.CategoriesFragment
 import com.hakancevik.newsappbihaber.view.SavedNewsFragment
 import com.hakancevik.newsappbihaber.view.SearchNewsFragment
+import com.hakancevik.newsappbihaber.view.tabbed.BusinessFragment
+import com.hakancevik.newsappbihaber.view.tabbed.EntertainmentFragment
 import javax.inject.Inject
 
 
@@ -22,6 +25,9 @@ class NewsFragmentFactory @Inject constructor(
             BreakingNewsFragment::class.java.name -> BreakingNewsFragment(newsAdapter)
             SavedNewsFragment::class.java.name -> SavedNewsFragment(newsAdapter)
             SearchNewsFragment::class.java.name -> SearchNewsFragment(searchNewsAdapter)
+            CategoriesFragment::class.java.name -> CategoriesFragment(newsAdapter)
+            BusinessFragment::class.java.name -> BusinessFragment(newsAdapter)
+            EntertainmentFragment::class.java.name -> EntertainmentFragment(newsAdapter)
             else -> super.instantiate(classLoader, className)
         }
     }

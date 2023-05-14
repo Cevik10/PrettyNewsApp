@@ -58,21 +58,8 @@ class SearchNewsFragment @Inject constructor(
 
 
         searchNewsAdapter.setOnItemClickListener {
-            //            val bundle = Bundle().apply {
-            //                putSerializable("article", it)
-            //                putInt("routeKey", R.id.searchNewsFragment)
-            //            }
-            //
-            //            findNavController().navigate(
-            //                R.id.action_searchNewsFragment_to_articleFragment,
-            //                bundle
-            //            )
-
-
             val action = SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it, R.id.searchNewsFragment)
             findNavController().navigate(action)
-
-
         }
 
 
@@ -116,7 +103,7 @@ class SearchNewsFragment @Inject constructor(
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
-                        requireActivity().customToast(message)
+                        requireActivity().customToast("message: sıkıntı var")
                     }
 
                 }

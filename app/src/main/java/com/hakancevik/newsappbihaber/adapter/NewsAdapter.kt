@@ -52,7 +52,7 @@ class NewsAdapter @Inject constructor(
         holder.itemView.apply {
             glide.load(article.urlToImage).into(holder.binding.articleImageView)
             holder.binding.sourceText.text = article.source?.name
-            holder.binding.titleText.text = article.title
+            holder.binding.titleText.text = article?.title
             holder.binding.descriptionText.text = article.description
             holder.binding.publishedAtText.text = article.publishedAt
 

@@ -78,11 +78,11 @@ class ArticleFragment : Fragment() {
         super.onDestroyView()
         _binding = null
 
-        routeKey = args.routeKey
-
-        if (routeKey != -1) {
-            findNavController().clearBackStack(routeKey)
-        }
+//        routeKey = args.routeKey
+//
+//        if (routeKey != -1) {
+//            findNavController().clearBackStack(routeKey)
+//        }
 
 
     }

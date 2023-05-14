@@ -11,17 +11,21 @@ import com.hakancevik.newsappbihaber.view.tabbed.HealthFragment
 import com.hakancevik.newsappbihaber.view.tabbed.ScienceFragment
 import com.hakancevik.newsappbihaber.view.tabbed.SportsFragment
 import com.hakancevik.newsappbihaber.view.tabbed.TechnologyFragment
+import javax.inject.Inject
 
-class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+class ViewPagerAdapter @Inject constructor (private val newsAdapter: NewsAdapter,fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int {
         return 7
     }
 
+
     override fun createFragment(position: Int): Fragment {
+
+
         return when (position) {
-            0 -> BusinessFragment.newInstance()
-            1 -> EntertainmentFragment.newInstance()
+            0 -> BusinessFragment.newInstance(newsAdapter)
+            1 -> EntertainmentFragment.newInstance(newsAdapter)
             2 -> GeneralFragment.newInstance()
             3 -> HealthFragment.newInstance()
             4 -> ScienceFragment.newInstance()

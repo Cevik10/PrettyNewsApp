@@ -12,6 +12,8 @@ interface NewsRepository {
 
     suspend fun searchNews(searchQuery: String, pageNumber: Int): Response<NewsResponse>
 
+    suspend fun getCategoryNews(category: String, pageNumber: Int): Response<NewsResponse>
+
     suspend fun insertArticle(article: Article)
 
     suspend fun deleteArticle(article: Article)

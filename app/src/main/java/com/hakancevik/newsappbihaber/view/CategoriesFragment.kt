@@ -9,9 +9,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.hakancevik.newsappbihaber.R
+import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 import com.hakancevik.newsappbihaber.adapter.ViewPagerAdapter
+import com.hakancevik.newsappbihaber.view.tabbed.BusinessFragment
+import javax.inject.Inject
 
-class CategoriesFragment : Fragment() {
+class CategoriesFragment @Inject constructor(
+    private val newsAdapter: NewsAdapter
+) : Fragment() {
 
 
     private lateinit var tabLayout: TabLayout
@@ -32,7 +37,7 @@ class CategoriesFragment : Fragment() {
 
         tabLayout = view.findViewById(R.id.tabLayout)
         viewPager2 = view.findViewById(R.id.viewPager2)
-        viewPagerAdapter = ViewPagerAdapter(childFragmentManager, lifecycle)
+        viewPagerAdapter = ViewPagerAdapter(newsAdapter,childFragmentManager, lifecycle)
         viewPager2.adapter = viewPagerAdapter
 
 

@@ -23,6 +23,7 @@ import com.hakancevik.newsappbihaber.databinding.FragmentBreakingNewsBinding
 
 import com.hakancevik.newsappbihaber.util.Constants.QUERY_PAGE_SIZE
 import com.hakancevik.newsappbihaber.util.Resource
+import com.hakancevik.newsappbihaber.util.customToast
 
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
@@ -61,17 +62,6 @@ class BreakingNewsFragment @Inject constructor(
 
 
         newsAdapter.setOnItemClickListener {
-//            val bundle = Bundle().apply {
-//                putSerializable("article", it)
-//                putInt("routeKey", R.id.breakingNewsFragment)
-//            }
-//
-//
-//            findNavController().navigate(
-//                R.id.action_breakingNewsFragment_to_articleFragment,
-//                bundle
-//            )
-
 
             val action = BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it, R.id.breakingNewsFragment)
             findNavController().navigate(action)
@@ -84,8 +74,10 @@ class BreakingNewsFragment @Inject constructor(
 
             when (response) {
                 is Resource.Success -> {
+                    activity?.customToast("başarılı")
                     hideProgressBar()
                     binding.internetConnectionInfoLayout.hide()
+
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles?.toList())
 
@@ -127,6 +119,7 @@ class BreakingNewsFragment @Inject constructor(
 
     private fun hideProgressBar() {
         binding.paginationProgressBar.hide()
+        binding.recyclerViewBreakingNews.show()
         isLoading = false
     }
 
