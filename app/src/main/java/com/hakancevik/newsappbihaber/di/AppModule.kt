@@ -72,7 +72,7 @@ object AppModule {
     fun provideGlide(@ApplicationContext context: Context) = Glide.with(context)
         .setDefaultRequestOptions(
             RequestOptions()
-                .placeholder(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.news_placeholder)
                 .error(R.drawable.ic_launcher_foreground)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
         )

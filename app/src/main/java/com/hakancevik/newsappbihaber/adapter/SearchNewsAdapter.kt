@@ -36,6 +36,10 @@ class SearchNewsAdapter @Inject constructor(
 
     val differ = AsyncListDiffer(this, diffUtil)
 
+    var newsList: List<Article>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val binding = RecyclerRowSearchNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -43,13 +47,13 @@ class SearchNewsAdapter @Inject constructor(
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return newsList.size
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
 
 
-        val article = differ.currentList[position]
+        val article = newsList[position]
 
         holder.itemView.apply {
             glide.load(article.urlToImage).into(holder.binding.articleImageView)
@@ -72,6 +76,11 @@ class SearchNewsAdapter @Inject constructor(
 
     fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
+    }
+
+    fun resetData() {
+        newsList = emptyList()
+        notifyDataSetChanged()
     }
 
 

@@ -49,7 +49,6 @@ class NewsViewModel @Inject constructor(
 
     init {
         getBreakingNews("us")
-        getCategoryNews("business")
     }
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {

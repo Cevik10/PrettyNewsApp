@@ -11,13 +11,17 @@ import com.hakancevik.newsappbihaber.view.SavedNewsFragment
 import com.hakancevik.newsappbihaber.view.SearchNewsFragment
 import com.hakancevik.newsappbihaber.view.tabbed.BusinessFragment
 import com.hakancevik.newsappbihaber.view.tabbed.EntertainmentFragment
+import com.hakancevik.newsappbihaber.view.tabbed.GeneralFragment
+import com.hakancevik.newsappbihaber.view.tabbed.HealthFragment
+import com.hakancevik.newsappbihaber.view.tabbed.ScienceFragment
+import com.hakancevik.newsappbihaber.view.tabbed.SportsFragment
+import com.hakancevik.newsappbihaber.view.tabbed.TechnologyFragment
 import javax.inject.Inject
 
 
 class NewsFragmentFactory @Inject constructor(
     private val newsAdapter: NewsAdapter,
     private val searchNewsAdapter: SearchNewsAdapter,
-    val glide: RequestManager
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
@@ -25,9 +29,15 @@ class NewsFragmentFactory @Inject constructor(
             BreakingNewsFragment::class.java.name -> BreakingNewsFragment(newsAdapter)
             SavedNewsFragment::class.java.name -> SavedNewsFragment(newsAdapter)
             SearchNewsFragment::class.java.name -> SearchNewsFragment(searchNewsAdapter)
-            CategoriesFragment::class.java.name -> CategoriesFragment(newsAdapter)
-            BusinessFragment::class.java.name -> BusinessFragment(newsAdapter)
-            EntertainmentFragment::class.java.name -> EntertainmentFragment(newsAdapter)
+
+            CategoriesFragment::class.java.name -> CategoriesFragment(searchNewsAdapter)
+            BusinessFragment::class.java.name -> BusinessFragment(searchNewsAdapter)
+            EntertainmentFragment::class.java.name -> EntertainmentFragment(searchNewsAdapter)
+            GeneralFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
+            HealthFragment::class.java.name -> HealthFragment(searchNewsAdapter)
+            ScienceFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
+            SportsFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
+            TechnologyFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
             else -> super.instantiate(classLoader, className)
         }
     }

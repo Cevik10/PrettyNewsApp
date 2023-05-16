@@ -10,8 +10,8 @@
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+
     </style>
 
     <style name="Theme.NewsAppBiHaber" parent="Base.Theme.NewsAppBiHaber">

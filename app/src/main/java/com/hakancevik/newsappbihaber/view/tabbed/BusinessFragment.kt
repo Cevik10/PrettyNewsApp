@@ -10,25 +10,24 @@ import android.widget.AbsListView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hakancevik.newsappbihaber.R
-import com.hakancevik.newsappbihaber.adapter.NewsAdapter
-import com.hakancevik.newsappbihaber.databinding.FragmentBreakingNewsBinding
+import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentBusinessBinding
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
 import com.hakancevik.newsappbihaber.util.customToast
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
-import com.hakancevik.newsappbihaber.view.BreakingNewsFragmentDirections
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 import javax.inject.Inject
 
 
 class BusinessFragment @Inject constructor(
-    private val newsAdapter: NewsAdapter
+    private val searchNewsAdapter: SearchNewsAdapter
 ) : Fragment() {
 
 
@@ -45,8 +44,7 @@ class BusinessFragment @Inject constructor(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBusinessBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,7 +53,10 @@ class BusinessFragment @Inject constructor(
         viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
         setupRecyclerView()
 
-        newsAdapter.setOnItemClickListener {
+
+        viewModel.getCategoryNews("business")
+
+        searchNewsAdapter.setOnItemClickListener {
 
             val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
             findNavController().navigate(action)
@@ -72,7 +73,8 @@ class BusinessFragment @Inject constructor(
                     binding.internetConnectionInfoLayout.hide()
 
                     response.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles?.toList())
+
+                        searchNewsAdapter.newsList = newsResponse.articles?.toList() ?: arrayListOf()
 
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
@@ -86,6 +88,8 @@ class BusinessFragment @Inject constructor(
                 }
 
                 is Resource.Error -> {
+
+
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
@@ -160,8 +164,8 @@ class BusinessFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         binding.recyclerViewBusiness.apply {
-            adapter = newsAdapter
-            layoutManager = LinearLayoutManager(activity)
+            adapter = searchNewsAdapter
+            layoutManager = GridLayoutManager(activity, 2)
             addOnScrollListener(this@BusinessFragment.scrollListener)
         }
     }
@@ -174,8 +178,8 @@ class BusinessFragment @Inject constructor(
     }
 
     companion object {
-        fun newInstance(newsAdapter: NewsAdapter): BusinessFragment {
-            return BusinessFragment(newsAdapter)
+        fun newInstance(searchNewsAdapter: SearchNewsAdapter): BusinessFragment {
+            return BusinessFragment(searchNewsAdapter)
         }
     }
 

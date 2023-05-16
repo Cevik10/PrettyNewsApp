@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.hakancevik.newsappbihaber.common.NewsFragmentFactory
 
 import com.hakancevik.newsappbihaber.databinding.ActivityMainBinding
+import com.hakancevik.newsappbihaber.util.customToast
 
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -28,16 +29,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.mToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
 
         val navController = findNavController(this, R.id.fragment)
         binding.bottomNavigationView.setupWithNavController(navController)
-
-
-//        binding.toolbarSettings.apply {
-//            setOnClickListener {
-//                playAnimation()
-//            }
-//        }
 
 
     }

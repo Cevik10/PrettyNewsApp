@@ -13,7 +13,7 @@ import com.hakancevik.newsappbihaber.view.tabbed.SportsFragment
 import com.hakancevik.newsappbihaber.view.tabbed.TechnologyFragment
 import javax.inject.Inject
 
-class ViewPagerAdapter @Inject constructor (private val newsAdapter: NewsAdapter,fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+class ViewPagerAdapter @Inject constructor(private val searchNewsAdapter: SearchNewsAdapter, fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int {
         return 7
@@ -24,13 +24,13 @@ class ViewPagerAdapter @Inject constructor (private val newsAdapter: NewsAdapter
 
 
         return when (position) {
-            0 -> BusinessFragment.newInstance(newsAdapter)
-            1 -> EntertainmentFragment.newInstance(newsAdapter)
-            2 -> GeneralFragment.newInstance()
-            3 -> HealthFragment.newInstance()
-            4 -> ScienceFragment.newInstance()
-            5 -> SportsFragment.newInstance()
-            6 -> TechnologyFragment.newInstance()
+            0 -> BusinessFragment.newInstance(searchNewsAdapter)
+            1 -> EntertainmentFragment.newInstance(searchNewsAdapter)
+            2 -> GeneralFragment.newInstance(searchNewsAdapter)
+            3 -> HealthFragment.newInstance(searchNewsAdapter)
+            4 -> ScienceFragment.newInstance(searchNewsAdapter)
+            5 -> SportsFragment.newInstance(searchNewsAdapter)
+            6 -> TechnologyFragment.newInstance(searchNewsAdapter)
             else -> Fragment()
         }
     }

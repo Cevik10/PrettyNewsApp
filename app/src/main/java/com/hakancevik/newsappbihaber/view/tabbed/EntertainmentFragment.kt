@@ -10,11 +10,13 @@ import android.widget.AbsListView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.NewsAdapter
-import com.hakancevik.newsappbihaber.databinding.FragmentBusinessBinding
+import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
+
 import com.hakancevik.newsappbihaber.databinding.FragmentEntertainmentBinding
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
@@ -27,7 +29,7 @@ import javax.inject.Inject
 
 
 class EntertainmentFragment @Inject constructor(
-    private val newsAdapter: NewsAdapter
+    private val searchNewsAdapter: SearchNewsAdapter
 ) : Fragment() {
 
 
@@ -44,8 +46,7 @@ class EntertainmentFragment @Inject constructor(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentEntertainmentBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,11 +55,16 @@ class EntertainmentFragment @Inject constructor(
         viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
         setupRecyclerView()
 
-        newsAdapter.setOnItemClickListener {
+        searchNewsAdapter.resetData()
+
+        viewModel.getCategoryNews("entertainment")
+
+
+
+        searchNewsAdapter.setOnItemClickListener {
 
             val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
             findNavController().navigate(action)
-
         }
 
 
@@ -66,12 +72,12 @@ class EntertainmentFragment @Inject constructor(
 
             when (response) {
                 is Resource.Success -> {
-                    activity?.customToast("başarılı")
                     hideProgressBar()
                     binding.internetConnectionInfoLayout.hide()
 
                     response.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles?.toList())
+
+                        searchNewsAdapter.newsList = newsResponse.articles?.toList() ?: emptyList()
 
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
@@ -94,8 +100,8 @@ class EntertainmentFragment @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
+                    binding.internetConnectionInfoLayout.hide()
                 }
             }
 
@@ -130,7 +136,7 @@ class EntertainmentFragment @Inject constructor(
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
-            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val layoutManager = recyclerView.layoutManager as GridLayoutManager
             val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
             val visibleItemCount = layoutManager.childCount
             val totalItemCount = layoutManager.itemCount
@@ -159,8 +165,8 @@ class EntertainmentFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         binding.recyclerViewEntertainment.apply {
-            adapter = newsAdapter
-            layoutManager = LinearLayoutManager(activity)
+            adapter = searchNewsAdapter
+            layoutManager = GridLayoutManager(activity, 2)
             addOnScrollListener(this@EntertainmentFragment.scrollListener)
         }
     }
@@ -173,8 +179,8 @@ class EntertainmentFragment @Inject constructor(
     }
 
     companion object {
-        fun newInstance(newsAdapter: NewsAdapter): EntertainmentFragment {
-            return EntertainmentFragment(newsAdapter)
+        fun newInstance(searchNewsAdapter: SearchNewsAdapter): EntertainmentFragment {
+            return EntertainmentFragment(searchNewsAdapter)
         }
     }
 

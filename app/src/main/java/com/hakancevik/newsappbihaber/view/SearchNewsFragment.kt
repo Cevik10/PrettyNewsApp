@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hakancevik.newsappbihaber.R
-import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentSearchNewsBinding
 import com.hakancevik.newsappbihaber.util.Constants.QUERY_PAGE_SIZE
@@ -46,12 +47,21 @@ class SearchNewsFragment @Inject constructor(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSearchNewsBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = (requireActivity() as AppCompatActivity).findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.mToolbar)
+        toolbar?.let {
+            (requireActivity() as AppCompatActivity).setSupportActionBar(it)
+            (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            it.title = "NewsApp"
+        }
+
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView?.show()
 
         viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
         setupRecyclerView()
@@ -78,7 +88,8 @@ class SearchNewsFragment @Inject constructor(
 
         binding.clearSearchEditText.setOnClickListener {
             binding.searchViewEditText.text.clear()
-            searchNewsAdapter.differ.submitList(arrayListOf())
+            //searchNewsAdapter.differ.submitList(arrayListOf())
+            searchNewsAdapter.newsList = arrayListOf()
         }
 
         viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
@@ -87,8 +98,8 @@ class SearchNewsFragment @Inject constructor(
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newsResponse ->
-                        searchNewsAdapter.differ.submitList(newsResponse.articles?.toList())
-
+                        //searchNewsAdapter.differ.submitList(newsResponse.articles?.toList())
+                        searchNewsAdapter.newsList = newsResponse.articles?.toList() ?: arrayListOf()
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
                             isLastPage = viewModel.searchNewsPage == totalPages
@@ -168,7 +179,8 @@ class SearchNewsFragment @Inject constructor(
             adapter = searchNewsAdapter
             layoutManager = GridLayoutManager(activity, 2)
             addOnScrollListener(this@SearchNewsFragment.scrollListener)
-            searchNewsAdapter.differ.submitList(arrayListOf())
+            //searchNewsAdapter.differ.submitList(arrayListOf())
+            searchNewsAdapter.newsList = arrayListOf()
         }
     }
 
