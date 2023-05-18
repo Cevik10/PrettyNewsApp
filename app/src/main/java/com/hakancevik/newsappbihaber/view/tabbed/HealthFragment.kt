@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+
 import androidx.recyclerview.widget.RecyclerView
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
@@ -22,7 +22,8 @@ import com.hakancevik.newsappbihaber.util.customToast
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
+import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+
 import javax.inject.Inject
 
 class HealthFragment @Inject constructor(
@@ -32,8 +33,7 @@ class HealthFragment @Inject constructor(
 
     private var _binding: FragmentHealthBinding? = null
     private val binding get() = _binding!!
-
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: CategoriesViewModel
 
     private val TAG = "HealthFragment"
 
@@ -49,11 +49,10 @@ class HealthFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
         setupRecyclerView()
 
-
-        viewModel.getCategoryNews("health")
+        viewModel.getHealthNews("us")
 
         searchNewsAdapter.setOnItemClickListener {
 
@@ -63,11 +62,11 @@ class HealthFragment @Inject constructor(
         }
 
 
-        viewModel.categoryNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.healthNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
-                    activity?.customToast("başarılı")
+
                     hideProgressBar()
                     binding.internetConnectionInfoLayout.hide()
 
@@ -77,7 +76,7 @@ class HealthFragment @Inject constructor(
 
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
-                            isLastPage = viewModel.categoryNewsPage == totalPages
+                            isLastPage = viewModel.healthNewsPage == totalPages
                             if (isLastPage) {
                                 binding.recyclerViewHealth.setPadding(0, 0, 0, 0)
                             }
@@ -106,7 +105,7 @@ class HealthFragment @Inject constructor(
 
 
         binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getCategoryNews("health")
+            viewModel.getHealthNews("us")
         }
 
 
@@ -145,7 +144,7 @@ class HealthFragment @Inject constructor(
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getCategoryNews("health")
+                viewModel.getHealthNews("us")
                 isScrolling = false
             }
         }

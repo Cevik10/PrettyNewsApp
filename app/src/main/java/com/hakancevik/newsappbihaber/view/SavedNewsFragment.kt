@@ -18,7 +18,6 @@ import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 
 import com.hakancevik.newsappbihaber.databinding.FragmentSavedNewsBinding
-import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
@@ -45,7 +44,7 @@ class SavedNewsFragment @Inject constructor(
             val layoutPosition = viewHolder.layoutPosition
             val selectedArticle = newsAdapter.differ.currentList[layoutPosition]
             viewModel.deleteArticle(selectedArticle)
-            Snackbar.make(requireView(), "Succesfully deleted.", Snackbar.LENGTH_SHORT).apply {
+            Snackbar.make(requireView(), "Successfully deleted.", Snackbar.LENGTH_SHORT).apply {
                 setAction("undo") {
                     viewModel.saveArticle(selectedArticle)
                 }
@@ -60,8 +59,7 @@ class SavedNewsFragment @Inject constructor(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSavedNewsBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
 
@@ -95,10 +93,9 @@ class SavedNewsFragment @Inject constructor(
         newsAdapter.setOnItemClickListener {
 
 
-            val action = SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it,R.id.savedNewsFragment)
+            val action = SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it, R.id.savedNewsFragment)
             findNavController().navigate(action)
 //
-
 
 
         }

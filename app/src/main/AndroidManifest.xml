@@ -19,7 +19,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.DayNight.NoActionBar">
+            android:theme="@style/Base.Theme.NewsAppBiHaber">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

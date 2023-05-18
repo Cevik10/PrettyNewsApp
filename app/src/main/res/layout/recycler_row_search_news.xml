@@ -7,7 +7,7 @@
     android:layout_margin="7dp"
     android:orientation="vertical"
     android:padding="7dp"
-    app:cardBackgroundColor="#794CAF50"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="13dp">
 
     <androidx.appcompat.widget.LinearLayoutCompat

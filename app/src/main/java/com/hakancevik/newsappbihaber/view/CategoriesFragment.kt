@@ -6,20 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.hakancevik.newsappbihaber.R
-import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.adapter.ViewPagerAdapter
 import com.hakancevik.newsappbihaber.util.show
-import com.hakancevik.newsappbihaber.view.tabbed.BusinessFragment
 import javax.inject.Inject
 
 class CategoriesFragment @Inject constructor(
-    private val searchNewsAdapter: SearchNewsAdapter
+    private val searchNewsAdapter: SearchNewsAdapter,
 ) : Fragment() {
 
 
@@ -51,7 +48,7 @@ class CategoriesFragment @Inject constructor(
 
         tabLayout = view.findViewById(R.id.tabLayout)
         viewPager2 = view.findViewById(R.id.viewPager2)
-        viewPagerAdapter = ViewPagerAdapter(searchNewsAdapter,childFragmentManager, lifecycle)
+        viewPagerAdapter = ViewPagerAdapter(searchNewsAdapter, childFragmentManager, lifecycle)
         viewPager2.adapter = viewPagerAdapter
 
 
@@ -82,7 +79,4 @@ class CategoriesFragment @Inject constructor(
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }

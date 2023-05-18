@@ -22,8 +22,8 @@ class NewsRepositoryImpl @Inject constructor(
         return newsAPI.searchForNews(searchQuery, pageNumber)
     }
 
-    override suspend fun getCategoryNews(category: String, pageNumber: Int): Response<NewsResponse> {
-        return newsAPI.getCategoryNews(category, pageNumber)
+    override suspend fun getCategoryNews(countryCode: String, category: String, pageNumber: Int): Response<NewsResponse> {
+        return newsAPI.getCategoryNews(countryCode, category, pageNumber)
     }
 
 

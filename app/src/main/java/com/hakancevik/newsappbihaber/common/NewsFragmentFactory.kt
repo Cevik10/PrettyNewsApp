@@ -2,7 +2,6 @@ package com.hakancevik.newsappbihaber.common
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import com.bumptech.glide.RequestManager
 import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.view.BreakingNewsFragment
@@ -35,9 +34,9 @@ class NewsFragmentFactory @Inject constructor(
             EntertainmentFragment::class.java.name -> EntertainmentFragment(searchNewsAdapter)
             GeneralFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
             HealthFragment::class.java.name -> HealthFragment(searchNewsAdapter)
-            ScienceFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
-            SportsFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
-            TechnologyFragment::class.java.name -> GeneralFragment(searchNewsAdapter)
+            ScienceFragment::class.java.name -> ScienceFragment(searchNewsAdapter)
+            SportsFragment::class.java.name -> SportsFragment(searchNewsAdapter)
+            TechnologyFragment::class.java.name -> TechnologyFragment(searchNewsAdapter)
             else -> super.instantiate(classLoader, className)
         }
     }

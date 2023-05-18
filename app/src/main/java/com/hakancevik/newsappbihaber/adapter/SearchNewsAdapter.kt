@@ -83,5 +83,10 @@ class SearchNewsAdapter @Inject constructor(
         notifyDataSetChanged()
     }
 
+    fun updateNewsList(updatedNewsList: List<Article>) {
+        newsList = updatedNewsList
+        notifyDataSetChanged()
+    }
+
 
 }

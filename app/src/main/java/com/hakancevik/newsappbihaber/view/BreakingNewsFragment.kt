@@ -50,8 +50,7 @@ class BreakingNewsFragment @Inject constructor(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBreakingNewsBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
 

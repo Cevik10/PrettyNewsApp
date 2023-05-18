@@ -22,7 +22,6 @@ class ViewPagerAdapter @Inject constructor(private val searchNewsAdapter: Search
 
     override fun createFragment(position: Int): Fragment {
 
-
         return when (position) {
             0 -> BusinessFragment.newInstance(searchNewsAdapter)
             1 -> EntertainmentFragment.newInstance(searchNewsAdapter)

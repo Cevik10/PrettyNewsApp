@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+
 import androidx.recyclerview.widget.RecyclerView
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
@@ -23,7 +23,8 @@ import com.hakancevik.newsappbihaber.util.customToast
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
+import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+
 import javax.inject.Inject
 
 
@@ -35,7 +36,7 @@ class SportsFragment @Inject constructor(
     private var _binding: FragmentSportsBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: CategoriesViewModel
 
     private val TAG = "SportsFragment"
 
@@ -51,24 +52,23 @@ class SportsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
         setupRecyclerView()
 
-        viewModel.getCategoryNews("sports")
+        viewModel.getSportsNews("us")
+
 
         searchNewsAdapter.setOnItemClickListener {
-
             val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
             findNavController().navigate(action)
-
         }
 
 
-        viewModel.categoryNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.sportsNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
-                    activity?.customToast("başarılı")
+
                     hideProgressBar()
                     binding.internetConnectionInfoLayout.hide()
 
@@ -78,7 +78,7 @@ class SportsFragment @Inject constructor(
 
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
-                            isLastPage = viewModel.categoryNewsPage == totalPages
+                            isLastPage = viewModel.sportsNewsPage == totalPages
                             if (isLastPage) {
                                 binding.recyclerViewSports.setPadding(0, 0, 0, 0)
                             }
@@ -107,7 +107,7 @@ class SportsFragment @Inject constructor(
 
 
         binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getCategoryNews("sports")
+            viewModel.getSportsNews("us")
         }
 
 
@@ -146,7 +146,7 @@ class SportsFragment @Inject constructor(
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getCategoryNews("sports")
+                viewModel.getSportsNews("us")
                 isScrolling = false
             }
         }

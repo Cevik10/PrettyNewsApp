@@ -27,6 +27,7 @@ import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
+import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
 import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ class GeneralFragment @Inject constructor(
     private var _binding: FragmentGeneralBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: CategoriesViewModel
 
     private val TAG = "GeneralFragment"
 
@@ -55,10 +56,12 @@ class GeneralFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
         setupRecyclerView()
 
-        viewModel.getCategoryNews("general")
+
+        viewModel.getGeneralNews("us")
+
 
         searchNewsAdapter.setOnItemClickListener {
 
@@ -68,11 +71,10 @@ class GeneralFragment @Inject constructor(
         }
 
 
-        viewModel.categoryNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.generalNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
-                    activity?.customToast("başarılı")
                     hideProgressBar()
                     binding.internetConnectionInfoLayout.hide()
 
@@ -82,7 +84,7 @@ class GeneralFragment @Inject constructor(
 
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
-                            isLastPage = viewModel.categoryNewsPage == totalPages
+                            isLastPage = viewModel.generalNewsPage == totalPages
                             if (isLastPage) {
                                 binding.recyclerViewGeneral.setPadding(0, 0, 0, 0)
                             }
@@ -111,7 +113,7 @@ class GeneralFragment @Inject constructor(
 
 
         binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getCategoryNews("general")
+            viewModel.getGeneralNews("us")
         }
 
 
@@ -150,7 +152,7 @@ class GeneralFragment @Inject constructor(
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getCategoryNews("general")
+                viewModel.getGeneralNews("us")
                 isScrolling = false
             }
         }

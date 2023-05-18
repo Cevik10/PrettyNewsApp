@@ -16,13 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentBusinessBinding
+
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
 import com.hakancevik.newsappbihaber.util.customToast
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
+import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+
 import javax.inject.Inject
 
 
@@ -34,7 +36,7 @@ class BusinessFragment @Inject constructor(
     private var _binding: FragmentBusinessBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: CategoriesViewModel
 
     private val TAG = "BusinessFragment"
 
@@ -50,25 +52,23 @@ class BusinessFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
         setupRecyclerView()
 
+        viewModel.getBusinessNews("us")
 
-        viewModel.getCategoryNews("business")
 
         searchNewsAdapter.setOnItemClickListener {
-
             val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
             findNavController().navigate(action)
-
         }
 
 
-        viewModel.categoryNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.businessNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
-                    activity?.customToast("başarılı")
+
                     hideProgressBar()
                     binding.internetConnectionInfoLayout.hide()
 
@@ -78,7 +78,7 @@ class BusinessFragment @Inject constructor(
 
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
-                            isLastPage = viewModel.categoryNewsPage == totalPages
+                            isLastPage = viewModel.businessNewsPage == totalPages
                             if (isLastPage) {
                                 binding.recyclerViewBusiness.setPadding(0, 0, 0, 0)
                             }
@@ -88,7 +88,6 @@ class BusinessFragment @Inject constructor(
                 }
 
                 is Resource.Error -> {
-
 
                     hideProgressBar()
                     response.message?.let { message ->
@@ -108,8 +107,11 @@ class BusinessFragment @Inject constructor(
         })
 
 
+
+
+
         binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getCategoryNews("business")
+            viewModel.getBusinessNews("us")
         }
 
 
@@ -148,7 +150,7 @@ class BusinessFragment @Inject constructor(
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getCategoryNews("business")
+                viewModel.getBusinessNews("us")
                 isScrolling = false
             }
         }

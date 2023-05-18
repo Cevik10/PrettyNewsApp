@@ -43,9 +43,6 @@ class NewsViewModel @Inject constructor(
     var searchNewsPage = 1
     var searchNewsResponse: NewsResponse? = null
 
-    val categoryNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var categoryNewsPage = 1
-    var categoryNewsResponse: NewsResponse? = null
 
     init {
         getBreakingNews("us")
@@ -57,10 +54,6 @@ class NewsViewModel @Inject constructor(
 
     fun searchNews(searchQuery: String) = viewModelScope.launch {
         safeSearchNewsCall(searchQuery)
-    }
-
-    fun getCategoryNews(category: String) = viewModelScope.launch {
-        safeCategoryNewsCall(category)
     }
 
 
@@ -105,26 +98,6 @@ class NewsViewModel @Inject constructor(
     }
 
 
-    private fun handleCategoryNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                categoryNewsPage++
-                if (categoryNewsResponse == null) {
-                    categoryNewsResponse = resultResponse
-                } else {
-                    val oldArticles = categoryNewsResponse?.articles
-                    val newArticles = resultResponse.articles
-                    if (newArticles != null) {
-                        oldArticles?.addAll(newArticles)
-                    }
-                }
-                return Resource.Success(categoryNewsResponse ?: resultResponse)
-            }
-        }
-        return Resource.Error(response.message())
-    }
-
-
     fun saveArticle(article: Article) = viewModelScope.launch {
         repository.insertArticle(article)
         savedNewsInfo.value = false
@@ -148,7 +121,7 @@ class NewsViewModel @Inject constructor(
                 val response = repository.getBreakingNews(countryCode, breakingNewsPage)
                 breakingNews.postValue(handleBreakingNewsResponse(response))
             } else {
-                breakingNews.postValue(Resource.Error("No internet connection"))
+                breakingNews.postValue(Resource.Error("No Internet Connection"))
             }
 
         } catch (t: Throwable) {
@@ -167,7 +140,7 @@ class NewsViewModel @Inject constructor(
                 val response = repository.searchNews(searchQuery, searchNewsPage)
                 searchNews.postValue(handleSearchNewsResponse(response))
             } else {
-                searchNews.postValue(Resource.Error("No internet connection"))
+                searchNews.postValue(Resource.Error("No Internet Connection"))
             }
 
         } catch (t: Throwable) {
@@ -179,24 +152,6 @@ class NewsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun safeCategoryNewsCall(category: String) {
-        categoryNews.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()) {
-                val response = repository.getCategoryNews(category, categoryNewsPage)
-                categoryNews.postValue(handleCategoryNewsResponse(response))
-            } else {
-                categoryNews.postValue(Resource.Error("No internet connection"))
-            }
-
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> categoryNews.postValue(Resource.Error("Network Failure"))
-                else -> categoryNews.postValue(Resource.Error("Conversion Error"))
-            }
-
-        }
-    }
 
     private fun hasInternetConnection(): Boolean {
 

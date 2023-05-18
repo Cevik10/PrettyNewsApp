@@ -9,5 +9,7 @@
     <color name="colorSecondaryVariant">#969696</color>
     <color name="colorOnSecondary">#FFFFFFFF</color>
     <color name="statusBarColor">#CD5B5B</color>
+    <color name="toolbarColor">#2a2931</color>
+
 
 </resources>
