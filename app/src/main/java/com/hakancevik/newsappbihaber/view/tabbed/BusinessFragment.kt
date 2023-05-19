@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentBusinessBinding
-import com.hakancevik.newsappbihaber.util.Constants
+
 import com.hakancevik.newsappbihaber.util.Constants.QUERY_PAGE_SIZE
 
 import com.hakancevik.newsappbihaber.util.Resource
@@ -78,7 +78,7 @@ class BusinessFragment @Inject constructor(
 
     private fun subscribeToObservers() {
 
-        viewModel.businessNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.businessNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
@@ -119,7 +119,7 @@ class BusinessFragment @Inject constructor(
             }
 
 
-        })
+        }
 
 
 
@@ -164,7 +164,7 @@ class BusinessFragment @Inject constructor(
             val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
             val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
             val isNotAtBeginning = firstVisibleItemPosition >= 0
-            val isTotalMoreThanVisible = totalItemCount >= Constants.QUERY_PAGE_SIZE
+            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
 
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling

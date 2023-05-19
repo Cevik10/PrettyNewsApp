@@ -17,7 +17,7 @@
         android:background="@drawable/bg_search_text"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="5dp"
-        android:hint="Search news.."
+        android:hint="@string/search_news_hint"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="@color/colorPrimary"

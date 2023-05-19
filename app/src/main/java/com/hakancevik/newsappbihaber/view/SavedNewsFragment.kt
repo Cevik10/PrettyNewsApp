@@ -94,7 +94,7 @@ class SavedNewsFragment @Inject constructor(
             findNavController().navigate(action)
         }
 
-        viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { articles ->
+        viewModel.getSavedNews().observe(viewLifecycleOwner) { articles ->
             if (articles.isEmpty()) {
                 viewModel.savedNewsInfo.value = true
                 newsAdapter.differ.submitList(articles)
@@ -102,9 +102,9 @@ class SavedNewsFragment @Inject constructor(
                 newsAdapter.differ.submitList(articles)
                 viewModel.savedNewsInfo.value = false
             }
-        })
+        }
 
-        viewModel.savedNewsInfo.observe(viewLifecycleOwner, Observer {
+        viewModel.savedNewsInfo.observe(viewLifecycleOwner) {
             if (it) {
                 binding.recyclerViewSavedNews.hide()
                 binding.savedNewsInfoLayout.show()
@@ -112,7 +112,7 @@ class SavedNewsFragment @Inject constructor(
                 binding.recyclerViewSavedNews.show()
                 binding.savedNewsInfoLayout.hide()
             }
-        })
+        }
 
 
     }

@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -77,7 +77,7 @@ class SportsFragment @Inject constructor(
     }
 
     private fun subscribeToObservers() {
-        viewModel.sportsNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.sportsNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
@@ -117,7 +117,7 @@ class SportsFragment @Inject constructor(
             }
 
 
-        })
+        }
 
 
 

@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
-import com.hakancevik.newsappbihaber.R
+
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentHealthBinding
 import com.hakancevik.newsappbihaber.util.Constants
@@ -22,7 +22,7 @@ import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+
 import com.hakancevik.newsappbihaber.viewmodel.tabbed.HealthViewModel
 
 import javax.inject.Inject
@@ -73,7 +73,7 @@ class HealthFragment @Inject constructor(
     }
 
     private fun subscribeToObservers() {
-        viewModel.healthNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.healthNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
@@ -113,7 +113,7 @@ class HealthFragment @Inject constructor(
             }
 
 
-        })
+        }
 
 
         viewModel.healthConnectionInfo.observe(viewLifecycleOwner) {

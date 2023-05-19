@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,7 +18,7 @@ import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentTechnologyBinding
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
-import com.hakancevik.newsappbihaber.util.customToast
+
 import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
@@ -76,11 +76,11 @@ class TechnologyFragment @Inject constructor(
     }
 
     private fun subscribeToObservers() {
-        viewModel.technologyNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.technologyNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
-                    activity?.customToast("başarılı")
+
                     hideProgressBar()
                     viewModel.technologyConnectionInfo.value = false
 
@@ -116,7 +116,7 @@ class TechnologyFragment @Inject constructor(
             }
 
 
-        })
+        }
 
 
 

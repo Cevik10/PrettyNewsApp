@@ -11,7 +11,7 @@ import com.hakancevik.newsappbihaber.databinding.FragmentGeneralBinding
 
 
 import android.widget.AbsListView
-import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -80,7 +80,7 @@ class GeneralFragment @Inject constructor(
 
     private fun subscribeToObservers() {
 
-        viewModel.generalNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.generalNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
@@ -119,7 +119,7 @@ class GeneralFragment @Inject constructor(
             }
 
 
-        })
+        }
 
 
         viewModel.generalConnectionInfo.observe(viewLifecycleOwner) {

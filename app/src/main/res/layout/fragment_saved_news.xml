@@ -51,7 +51,7 @@
             android:layout_margin="10dp"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:text="The news you have \n saved will appear here."
+            android:text="@string/saved_news_info"
             android:textAlignment="center"
             android:textSize="21sp"
             android:visibility="visible" />

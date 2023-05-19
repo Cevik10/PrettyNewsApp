@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -92,7 +92,7 @@ class SearchNewsFragment @Inject constructor(
             searchNewsAdapter.newsList = arrayListOf()
         }
 
-        viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.searchNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
@@ -124,7 +124,7 @@ class SearchNewsFragment @Inject constructor(
                 }
             }
 
-        })
+        }
 
 
     }

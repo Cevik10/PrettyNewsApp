@@ -3,4 +3,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="clear_text_button">clear text button</string>
+    <string name="info_image">info image</string>
+    <string name="fab_button">fab button</string>
+    <string name="no_network_connection">No network connection.</string>
+    <string name="try_again">Try Again</string>
+    <string name="saved_news_info">The news you have \n saved will appear here.</string>
+    <string name="search_news_hint">Search news..</string>
+    <string name="title">TITLE</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="source">SOURCE</string>
+    <string name="published_at">PUBLISHED AT</string>
 </resources>

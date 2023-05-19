@@ -11,6 +11,7 @@
         android:layout_width="@dimen/custom_toast_icon_size"
         android:layout_height="@dimen/custom_toast_icon_size"
         android:layout_margin="@dimen/custom_toast_margin"
+        android:contentDescription="@string/info_image"
         app:srcCompat="@drawable/info_icon" />
 
     <TextView

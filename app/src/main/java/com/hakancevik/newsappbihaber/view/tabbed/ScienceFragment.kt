@@ -73,7 +73,7 @@ class ScienceFragment @Inject constructor(
     }
 
     private fun subscribeToObservers() {
-        viewModel.scienceNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.scienceNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
@@ -113,7 +113,7 @@ class ScienceFragment @Inject constructor(
             }
 
 
-        })
+        }
 
 
         viewModel.scienceConnectionInfo.observe(viewLifecycleOwner) {
