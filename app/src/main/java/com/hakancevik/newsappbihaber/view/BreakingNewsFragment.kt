@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import androidx.appcompat.app.AppCompatActivity
 
-import androidx.lifecycle.Observer
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
@@ -91,7 +91,7 @@ class BreakingNewsFragment @Inject constructor(
     }
 
     private fun subscribeToObservers() {
-        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.breakingNews.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Success -> {
@@ -115,6 +115,7 @@ class BreakingNewsFragment @Inject constructor(
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    activity?.customToast("api limit")
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
                     }
@@ -128,7 +129,7 @@ class BreakingNewsFragment @Inject constructor(
                 }
             }
 
-        })
+        }
 
 
         viewModel.breakingNewsInfo.observe(viewLifecycleOwner) {
