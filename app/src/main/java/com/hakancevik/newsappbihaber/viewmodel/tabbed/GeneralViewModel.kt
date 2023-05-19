@@ -1,4 +1,4 @@
-package com.hakancevik.newsappbihaber.viewmodel
+package com.hakancevik.newsappbihaber.viewmodel.tabbed
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -8,13 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hakancevik.newsappbihaber.model.NewsResponse
 import com.hakancevik.newsappbihaber.repo.NewsRepository
-import com.hakancevik.newsappbihaber.util.Constants.BUSINESS
-import com.hakancevik.newsappbihaber.util.Constants.ENTERTAINMENT
-import com.hakancevik.newsappbihaber.util.Constants.GENERAL
-import com.hakancevik.newsappbihaber.util.Constants.HEALTH
-import com.hakancevik.newsappbihaber.util.Constants.SCIENCE
-import com.hakancevik.newsappbihaber.util.Constants.SPORTS
-import com.hakancevik.newsappbihaber.util.Constants.TECHNOLOGY
+import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,55 +17,61 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoriesViewModel @Inject constructor(
+class GeneralViewModel @Inject constructor(
     private val repository: NewsRepository,
     private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
 
-    val categoryNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var categoryNewsPage = 1
-    var categoryNewsResponse: NewsResponse? = null
+    val generalConnectionInfo = MutableLiveData<Boolean>()
+
+    val generalNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    var generalNewsPage = 1
+    var generalNewsResponse: NewsResponse? = null
 
 
-    fun getCategoryNews(countryCode: String, category: String) = viewModelScope.launch {
-        safeCategoryNewsCall(countryCode, category)
+    fun getGeneralNews(countryCode: String) = viewModelScope.launch {
+        safeGeneralNewsCall(countryCode)
     }
 
 
-    private fun handleCategoryNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
+    private fun handleGeneralNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
         if (response.isSuccessful) {
+
+            generalConnectionInfo.value = false
+
             response.body()?.let { resultResponse ->
-                categoryNewsPage++
-                if (categoryNewsResponse == null) {
-                    categoryNewsResponse = resultResponse
+                generalNewsPage++
+                if (generalNewsResponse == null) {
+                    generalNewsResponse = resultResponse
                 } else {
-                    val oldArticles = categoryNewsResponse?.articles
+                    val oldArticles = generalNewsResponse?.articles
                     val newArticles = resultResponse.articles
                     if (newArticles != null) {
                         oldArticles?.addAll(newArticles)
                     }
                 }
-                return Resource.Success(categoryNewsResponse ?: resultResponse)
+                return Resource.Success(generalNewsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())
     }
 
 
-    private suspend fun safeCategoryNewsCall(countryCode: String, category: String) {
-        categoryNews.postValue(Resource.Loading())
+    private suspend fun safeGeneralNewsCall(countryCode: String) {
+        generalNews.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = repository.getCategoryNews(countryCode, category, categoryNewsPage)
-                categoryNews.postValue(handleCategoryNewsResponse(response))
+                val response = repository.getCategoryNews(countryCode, Constants.GENERAL, generalNewsPage)
+                generalNews.postValue(handleGeneralNewsResponse(response))
             } else {
-                categoryNews.postValue(Resource.Error("No Internet Connection"))
+                generalNews.postValue(Resource.Error("No Internet Connection"))
+                generalConnectionInfo.value = true
             }
 
         } catch (t: Throwable) {
             when (t) {
-                is IOException -> categoryNews.postValue(Resource.Error("Network Failure"))
-                else -> categoryNews.postValue(Resource.Error("Conversion Error"))
+                is IOException -> generalNews.postValue(Resource.Error("Network Failure"))
+                else -> generalNews.postValue(Resource.Error("Conversion Error"))
             }
 
         }
@@ -101,5 +101,6 @@ class CategoriesViewModel @Inject constructor(
         }
         return false
     }
+
 
 }

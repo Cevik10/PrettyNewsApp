@@ -13,19 +13,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
-import com.hakancevik.newsappbihaber.R
+
 
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 
 import com.hakancevik.newsappbihaber.databinding.FragmentEntertainmentBinding
-
 import com.hakancevik.newsappbihaber.util.Constants
+
 import com.hakancevik.newsappbihaber.util.Resource
+import com.hakancevik.newsappbihaber.util.gone
 
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+
+import com.hakancevik.newsappbihaber.viewmodel.tabbed.EntertainmentViewModel
 
 import javax.inject.Inject
 
@@ -38,7 +40,7 @@ class EntertainmentFragment @Inject constructor(
     private var _binding: FragmentEntertainmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: CategoriesViewModel
+    private lateinit var viewModel: EntertainmentViewModel
 
     private val TAG = "EntertainmentFragment"
 
@@ -54,23 +56,35 @@ class EntertainmentFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[EntertainmentViewModel::class.java]
         setupRecyclerView()
 
         viewModel.getEntertainmentNews("us")
 
         searchNewsAdapter.setOnItemClickListener {
-            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
+            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it)
             findNavController().navigate(action)
         }
 
+
+        subscribeToObservers()
+
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getEntertainmentNews("us")
+        }
+
+
+    }
+
+    private fun subscribeToObservers() {
 
         viewModel.entertainmentNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.entertainmentConnectionInfo.value = false
 
                     response.data?.let { newsResponse ->
 
@@ -84,22 +98,20 @@ class EntertainmentFragment @Inject constructor(
                                 binding.recyclerViewEntertainment.setPadding(0, 0, 0, 0)
                             }
                         }
-
                     }
                 }
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    viewModel.entertainmentConnectionInfo.value = true
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
-                        binding.internetConnectionInfoLayout.show()
                     }
-
                 }
 
                 is Resource.Loading -> {
                     showProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.entertainmentConnectionInfo.value = false
                 }
             }
 
@@ -107,8 +119,14 @@ class EntertainmentFragment @Inject constructor(
         })
 
 
-        binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getEntertainmentNews("us")
+        viewModel.entertainmentConnectionInfo.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.internetConnectionInfoLayout.show()
+                binding.recyclerViewEntertainment.gone()
+            } else {
+                binding.recyclerViewEntertainment.show()
+                binding.internetConnectionInfoLayout.gone()
+            }
         }
 
 

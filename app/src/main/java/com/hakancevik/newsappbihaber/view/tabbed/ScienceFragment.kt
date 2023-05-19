@@ -13,16 +13,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
-import com.hakancevik.newsappbihaber.R
+
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentScienceBinding
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
-import com.hakancevik.newsappbihaber.util.customToast
+import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+
+import com.hakancevik.newsappbihaber.viewmodel.tabbed.ScienceViewModel
 
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class ScienceFragment @Inject constructor(
     private var _binding: FragmentScienceBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: CategoriesViewModel
+    private lateinit var viewModel: ScienceViewModel
 
     private val TAG = "ScienceFragment"
 
@@ -50,24 +51,35 @@ class ScienceFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[ScienceViewModel::class.java]
         setupRecyclerView()
 
         viewModel.getScienceNews("us")
 
         searchNewsAdapter.setOnItemClickListener {
-            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
+            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it)
             findNavController().navigate(action)
         }
 
 
+        subscribeToObservers()
+
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getScienceNews("us")
+        }
+
+
+    }
+
+    private fun subscribeToObservers() {
         viewModel.scienceNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
 
                     hideProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.scienceConnectionInfo.value = false
 
                     response.data?.let { newsResponse ->
 
@@ -86,6 +98,7 @@ class ScienceFragment @Inject constructor(
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    viewModel.scienceConnectionInfo.value = true
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
                         binding.internetConnectionInfoLayout.show()
@@ -94,8 +107,8 @@ class ScienceFragment @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
+                    viewModel.scienceConnectionInfo.value = false
                 }
             }
 
@@ -103,8 +116,14 @@ class ScienceFragment @Inject constructor(
         })
 
 
-        binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getScienceNews("us")
+        viewModel.scienceConnectionInfo.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.internetConnectionInfoLayout.show()
+                binding.recyclerViewScience.gone()
+            } else {
+                binding.recyclerViewScience.show()
+                binding.internetConnectionInfoLayout.gone()
+            }
         }
 
 

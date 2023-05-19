@@ -26,7 +26,57 @@
             android:background="@color/toolbarColor"
             app:layout_collapseMode="pin"
             app:title="Best News"
-            app:titleTextColor="@color/design_default_color_on_primary" />
+            app:titleTextColor="@color/design_default_color_on_primary">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <ImageView
+                    android:id="@+id/toolbarLogo"
+                    android:layout_width="49dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="7dp"
+                    android:contentDescription="toolbar logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/toolbarTitle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.545"
+                    app:srcCompat="@drawable/app_logo" />
+
+                <TextView
+                    android:id="@+id/toolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato_black"
+                    android:text="BestNews"
+                    android:textColor="@color/white"
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/toolbarSettings"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="false"
+                    app:lottie_colorFilter="@color/white"
+                    app:lottie_loop="false"
+                    app:lottie_rawRes="@raw/ic_setting_anim" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
 
     </com.google.android.material.appbar.AppBarLayout>

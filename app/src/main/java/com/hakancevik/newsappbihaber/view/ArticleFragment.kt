@@ -7,19 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.hakancevik.newsappbihaber.R
 import com.hakancevik.newsappbihaber.databinding.FragmentArticleBinding
 import com.hakancevik.newsappbihaber.util.customToast
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
 
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hakancevik.newsappbihaber.util.gone
-import com.hakancevik.newsappbihaber.util.hide
+import com.hakancevik.newsappbihaber.viewmodel.SavedNewsViewModel
 
 
 class ArticleFragment : Fragment() {
@@ -28,11 +26,9 @@ class ArticleFragment : Fragment() {
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: SavedNewsViewModel
 
     private val args: ArticleFragmentArgs by navArgs()
-
-    private var routeKey = -1
 
 
     override fun onCreateView(
@@ -46,6 +42,8 @@ class ArticleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(requireActivity())[SavedNewsViewModel::class.java]
 
         val toolbar = (requireActivity() as AppCompatActivity).findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.mToolbar)
         toolbar?.let {
@@ -71,11 +69,6 @@ class ArticleFragment : Fragment() {
         bottomNavigationView?.gone()
 
 
-
-
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
-
-
         val article = args.article
         binding.webView.apply {
             webViewClient = WebViewClient()
@@ -83,12 +76,9 @@ class ArticleFragment : Fragment() {
         }
 
 
-
         binding.fab.setOnClickListener {
-
             viewModel.saveArticle(article)
             activity?.customToast("Successfully saved.")
-
         }
 
 //        val callback = object : OnBackPressedCallback(true) {
@@ -105,13 +95,5 @@ class ArticleFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-
-//        routeKey = args.routeKey
-//
-//        if (routeKey != -1) {
-//            findNavController().clearBackStack(routeKey)
-//        }
-
-
     }
 }

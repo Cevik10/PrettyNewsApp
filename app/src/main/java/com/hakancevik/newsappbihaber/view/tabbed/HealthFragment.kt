@@ -18,11 +18,12 @@ import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentHealthBinding
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
-import com.hakancevik.newsappbihaber.util.customToast
+import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
 import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+import com.hakancevik.newsappbihaber.viewmodel.tabbed.HealthViewModel
 
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ class HealthFragment @Inject constructor(
 
     private var _binding: FragmentHealthBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: CategoriesViewModel
+    private lateinit var viewModel: HealthViewModel
 
     private val TAG = "HealthFragment"
 
@@ -49,26 +50,36 @@ class HealthFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[HealthViewModel::class.java]
         setupRecyclerView()
 
         viewModel.getHealthNews("us")
 
         searchNewsAdapter.setOnItemClickListener {
-
-            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
+            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it)
             findNavController().navigate(action)
-
         }
 
 
+        subscribeToObservers()
+
+
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getHealthNews("us")
+        }
+
+
+    }
+
+    private fun subscribeToObservers() {
         viewModel.healthNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
 
                     hideProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.healthConnectionInfo.value = false
 
                     response.data?.let { newsResponse ->
 
@@ -87,6 +98,7 @@ class HealthFragment @Inject constructor(
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    viewModel.healthConnectionInfo.value = true
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
                         binding.internetConnectionInfoLayout.show()
@@ -95,8 +107,8 @@ class HealthFragment @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
+                    viewModel.healthConnectionInfo.value = false
                 }
             }
 
@@ -104,8 +116,14 @@ class HealthFragment @Inject constructor(
         })
 
 
-        binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getHealthNews("us")
+        viewModel.healthConnectionInfo.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.internetConnectionInfoLayout.show()
+                binding.recyclerViewHealth.gone()
+            } else {
+                binding.recyclerViewHealth.show()
+                binding.internetConnectionInfoLayout.gone()
+            }
         }
 
 

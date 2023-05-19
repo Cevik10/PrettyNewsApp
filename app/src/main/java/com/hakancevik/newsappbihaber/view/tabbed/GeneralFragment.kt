@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.hakancevik.newsappbihaber.R
+
 import com.hakancevik.newsappbihaber.databinding.FragmentGeneralBinding
 
 
@@ -15,20 +15,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
-
 import com.hakancevik.newsappbihaber.util.Constants
+
 import com.hakancevik.newsappbihaber.util.Resource
-import com.hakancevik.newsappbihaber.util.customToast
+import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
+
+import com.hakancevik.newsappbihaber.viewmodel.tabbed.GeneralViewModel
 import javax.inject.Inject
 
 
@@ -40,7 +39,7 @@ class GeneralFragment @Inject constructor(
     private var _binding: FragmentGeneralBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: CategoriesViewModel
+    private lateinit var viewModel: GeneralViewModel
 
     private val TAG = "GeneralFragment"
 
@@ -56,7 +55,7 @@ class GeneralFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[GeneralViewModel::class.java]
         setupRecyclerView()
 
 
@@ -64,19 +63,29 @@ class GeneralFragment @Inject constructor(
 
 
         searchNewsAdapter.setOnItemClickListener {
-
-            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
+            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it)
             findNavController().navigate(action)
-
         }
 
+
+        subscribeToObservers()
+
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getGeneralNews("us")
+        }
+
+
+    }
+
+    private fun subscribeToObservers() {
 
         viewModel.generalNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.generalConnectionInfo.value = false
 
                     response.data?.let { newsResponse ->
 
@@ -95,6 +104,7 @@ class GeneralFragment @Inject constructor(
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    viewModel.generalConnectionInfo.value = true
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
                         binding.internetConnectionInfoLayout.show()
@@ -103,8 +113,8 @@ class GeneralFragment @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
+                    viewModel.generalConnectionInfo.value = false
                 }
             }
 
@@ -112,8 +122,14 @@ class GeneralFragment @Inject constructor(
         })
 
 
-        binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getGeneralNews("us")
+        viewModel.generalConnectionInfo.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.internetConnectionInfoLayout.show()
+                binding.recyclerViewGeneral.gone()
+            } else {
+                binding.recyclerViewGeneral.show()
+                binding.internetConnectionInfoLayout.gone()
+            }
         }
 
 

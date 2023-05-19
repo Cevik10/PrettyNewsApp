@@ -13,17 +13,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
-import com.hakancevik.newsappbihaber.R
+
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 
 import com.hakancevik.newsappbihaber.databinding.FragmentSportsBinding
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
-import com.hakancevik.newsappbihaber.util.customToast
+import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+
+import com.hakancevik.newsappbihaber.viewmodel.tabbed.SportsViewModel
 
 import javax.inject.Inject
 
@@ -36,7 +37,7 @@ class SportsFragment @Inject constructor(
     private var _binding: FragmentSportsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: CategoriesViewModel
+    private lateinit var viewModel: SportsViewModel
 
     private val TAG = "SportsFragment"
 
@@ -52,25 +53,37 @@ class SportsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[SportsViewModel::class.java]
         setupRecyclerView()
 
         viewModel.getSportsNews("us")
 
 
         searchNewsAdapter.setOnItemClickListener {
-            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
+            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it)
             findNavController().navigate(action)
         }
 
 
+        subscribeToObservers()
+
+
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getSportsNews("us")
+        }
+
+
+    }
+
+    private fun subscribeToObservers() {
         viewModel.sportsNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
 
                     hideProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.sportsConnectionInfo.value = false
 
                     response.data?.let { newsResponse ->
 
@@ -89,6 +102,7 @@ class SportsFragment @Inject constructor(
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    viewModel.sportsConnectionInfo.value = true
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
                         binding.internetConnectionInfoLayout.show()
@@ -97,8 +111,8 @@ class SportsFragment @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
+                    viewModel.sportsConnectionInfo.value = false
                 }
             }
 
@@ -106,11 +120,16 @@ class SportsFragment @Inject constructor(
         })
 
 
-        binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getSportsNews("us")
+
+        viewModel.sportsConnectionInfo.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.internetConnectionInfoLayout.show()
+                binding.recyclerViewSports.gone()
+            } else {
+                binding.recyclerViewSports.show()
+                binding.internetConnectionInfoLayout.gone()
+            }
         }
-
-
     }
 
 

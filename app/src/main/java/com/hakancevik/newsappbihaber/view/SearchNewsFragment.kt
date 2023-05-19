@@ -24,7 +24,7 @@ import com.hakancevik.newsappbihaber.util.Resource
 import com.hakancevik.newsappbihaber.util.customToast
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
+import com.hakancevik.newsappbihaber.viewmodel.SearchNewsViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -39,7 +39,7 @@ class SearchNewsFragment @Inject constructor(
     private val binding get() = _binding!!
 
     private val TAG = "SearchNewsFragment"
-    lateinit var viewModel: NewsViewModel
+    lateinit var viewModel: SearchNewsViewModel
 
 
     override fun onCreateView(
@@ -63,12 +63,12 @@ class SearchNewsFragment @Inject constructor(
         val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView?.show()
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[SearchNewsViewModel::class.java]
         setupRecyclerView()
 
 
         searchNewsAdapter.setOnItemClickListener {
-            val action = SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it, R.id.searchNewsFragment)
+            val action = SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it)
             findNavController().navigate(action)
         }
 

@@ -20,7 +20,7 @@ import com.hakancevik.newsappbihaber.adapter.NewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentSavedNewsBinding
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
+import com.hakancevik.newsappbihaber.viewmodel.SavedNewsViewModel
 import javax.inject.Inject
 
 class SavedNewsFragment @Inject constructor(
@@ -30,7 +30,7 @@ class SavedNewsFragment @Inject constructor(
     private var _binding: FragmentSavedNewsBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var viewModel: NewsViewModel
+    lateinit var viewModel: SavedNewsViewModel
 
     private val swipeCallBack = object : ItemTouchHelper.SimpleCallback(
         0,
@@ -71,14 +71,13 @@ class SavedNewsFragment @Inject constructor(
             (requireActivity() as AppCompatActivity).setSupportActionBar(it)
             (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
             it.title = "NewsApp"
-
         }
 
         val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView?.show()
 
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[SavedNewsViewModel::class.java]
 
 
         binding.recyclerViewSavedNews.apply {
@@ -91,13 +90,8 @@ class SavedNewsFragment @Inject constructor(
 
 
         newsAdapter.setOnItemClickListener {
-
-
-            val action = SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it, R.id.savedNewsFragment)
+            val action = SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it)
             findNavController().navigate(action)
-//
-
-
         }
 
         viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { articles ->

@@ -73,7 +73,7 @@ object AppModule {
         .setDefaultRequestOptions(
             RequestOptions()
                 .placeholder(R.drawable.news_placeholder)
-                .error(R.drawable.ic_launcher_foreground)
+                .error(R.drawable.news_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
         )
 

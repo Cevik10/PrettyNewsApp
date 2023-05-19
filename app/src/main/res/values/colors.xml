@@ -10,6 +10,7 @@
     <color name="colorOnSecondary">#FFFFFFFF</color>
     <color name="statusBarColor">#CD5B5B</color>
     <color name="toolbarColor">#2a2931</color>
+    <color name="splashColor">#D0BEFC</color>
 
 
 </resources>

@@ -13,16 +13,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
-import com.hakancevik.newsappbihaber.R
+
 import com.hakancevik.newsappbihaber.adapter.SearchNewsAdapter
 import com.hakancevik.newsappbihaber.databinding.FragmentTechnologyBinding
 import com.hakancevik.newsappbihaber.util.Constants
 import com.hakancevik.newsappbihaber.util.Resource
 import com.hakancevik.newsappbihaber.util.customToast
+import com.hakancevik.newsappbihaber.util.gone
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
 import com.hakancevik.newsappbihaber.view.CategoriesFragmentDirections
-import com.hakancevik.newsappbihaber.viewmodel.CategoriesViewModel
+import com.hakancevik.newsappbihaber.viewmodel.tabbed.TechnologyViewModel
 
 import javax.inject.Inject
 
@@ -35,7 +36,7 @@ class TechnologyFragment @Inject constructor(
     private var _binding: FragmentTechnologyBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: CategoriesViewModel
+    private lateinit var viewModel: TechnologyViewModel
 
     private val TAG = "TechnologyFragment"
 
@@ -51,24 +52,37 @@ class TechnologyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[CategoriesViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[TechnologyViewModel::class.java]
         setupRecyclerView()
 
         viewModel.getTechnologyNews("us")
 
         searchNewsAdapter.setOnItemClickListener {
-            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it, R.id.categoriesFragment)
+            val action = CategoriesFragmentDirections.actionCategoriesFragmentToArticleFragment(it)
             findNavController().navigate(action)
         }
 
 
+        subscribeToObservers()
+
+
+
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getTechnologyNews("us")
+        }
+
+
+    }
+
+    private fun subscribeToObservers() {
         viewModel.technologyNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
                     activity?.customToast("başarılı")
                     hideProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.technologyConnectionInfo.value = false
 
                     response.data?.let { newsResponse ->
 
@@ -87,6 +101,7 @@ class TechnologyFragment @Inject constructor(
 
                 is Resource.Error -> {
                     hideProgressBar()
+                    viewModel.technologyConnectionInfo.value = true
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
                         binding.internetConnectionInfoLayout.show()
@@ -95,8 +110,8 @@ class TechnologyFragment @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
+                    viewModel.technologyConnectionInfo.value = false
                 }
             }
 
@@ -104,10 +119,16 @@ class TechnologyFragment @Inject constructor(
         })
 
 
-        binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getTechnologyNews("us")
-        }
 
+        viewModel.technologyConnectionInfo.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.internetConnectionInfoLayout.show()
+                binding.recyclerViewTechnology.gone()
+            } else {
+                binding.recyclerViewTechnology.show()
+                binding.internetConnectionInfoLayout.gone()
+            }
+        }
 
     }
 

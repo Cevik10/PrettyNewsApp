@@ -26,10 +26,11 @@ import com.hakancevik.newsappbihaber.databinding.FragmentBreakingNewsBinding
 import com.hakancevik.newsappbihaber.util.Constants.QUERY_PAGE_SIZE
 import com.hakancevik.newsappbihaber.util.Resource
 import com.hakancevik.newsappbihaber.util.customToast
+import com.hakancevik.newsappbihaber.util.gone
 
 import com.hakancevik.newsappbihaber.util.hide
 import com.hakancevik.newsappbihaber.util.show
-import com.hakancevik.newsappbihaber.viewmodel.NewsViewModel
+import com.hakancevik.newsappbihaber.viewmodel.BreakingNewsViewModel
 import javax.inject.Inject
 
 
@@ -40,7 +41,7 @@ class BreakingNewsFragment @Inject constructor(
     private var _binding: FragmentBreakingNewsBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var viewModel: NewsViewModel
+    lateinit var viewModel: BreakingNewsViewModel
 
     private val TAG = "BreakingNewsFragment"
 
@@ -69,26 +70,34 @@ class BreakingNewsFragment @Inject constructor(
         bottomNavigationView?.show()
 
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[BreakingNewsViewModel::class.java]
         setupRecyclerView()
 
 
         newsAdapter.setOnItemClickListener {
-
-            val action = BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it, R.id.breakingNewsFragment)
+            val action = BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it)
             findNavController().navigate(action)
-
-
         }
 
 
+        subscribeToObservers()
+
+
+        binding.connectionTryAgainButton.setOnClickListener {
+            viewModel.getBreakingNews("us")
+        }
+
+
+    }
+
+    private fun subscribeToObservers() {
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
                     activity?.customToast("başarılı")
                     hideProgressBar()
-                    binding.internetConnectionInfoLayout.hide()
+                    viewModel.breakingNewsInfo.value = false
 
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles?.toList())
@@ -108,21 +117,28 @@ class BreakingNewsFragment @Inject constructor(
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
-                        binding.internetConnectionInfoLayout.show()
                     }
+                    viewModel.breakingNewsInfo.value = true
 
                 }
 
                 is Resource.Loading -> {
-                    binding.internetConnectionInfoLayout.hide()
                     showProgressBar()
+                    viewModel.breakingNewsInfo.value = false
                 }
             }
 
         })
 
-        binding.connectionTryAgainButton.setOnClickListener {
-            viewModel.getBreakingNews("us")
+
+        viewModel.breakingNewsInfo.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.internetConnectionInfoLayout.show()
+                binding.recyclerViewBreakingNews.gone()
+            } else {
+                binding.recyclerViewBreakingNews.show()
+                binding.internetConnectionInfoLayout.gone()
+            }
         }
 
 

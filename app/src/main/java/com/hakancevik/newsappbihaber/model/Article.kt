@@ -22,4 +22,4 @@ data class Article(
     val url: String?,
     val content: String?
 
-): Serializable
+) : Serializable
