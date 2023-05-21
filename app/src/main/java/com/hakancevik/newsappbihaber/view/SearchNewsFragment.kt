@@ -1,11 +1,13 @@
 package com.hakancevik.newsappbihaber.view
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
@@ -62,6 +64,11 @@ class SearchNewsFragment @Inject constructor(
 
         val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView?.show()
+
+        binding.searchViewEditText.requestFocus()
+
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.searchViewEditText, InputMethodManager.SHOW_IMPLICIT)
 
         viewModel = ViewModelProvider(requireActivity())[SearchNewsViewModel::class.java]
         setupRecyclerView()

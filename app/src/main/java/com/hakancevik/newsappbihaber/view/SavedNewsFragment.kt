@@ -1,12 +1,14 @@
 package com.hakancevik.newsappbihaber.view
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -44,12 +46,21 @@ class SavedNewsFragment @Inject constructor(
             val layoutPosition = viewHolder.layoutPosition
             val selectedArticle = newsAdapter.differ.currentList[layoutPosition]
             viewModel.deleteArticle(selectedArticle)
-            Snackbar.make(requireView(), "Successfully deleted.", Snackbar.LENGTH_SHORT).apply {
-                setAction("undo") {
-                    viewModel.saveArticle(selectedArticle)
-                }
-                show()
+
+            val snackbar = Snackbar.make(requireView(), "Successfully deleted.", Snackbar.LENGTH_SHORT)
+
+            val params = snackbar.view.layoutParams as CoordinatorLayout.LayoutParams
+            params.anchorId = R.id.bottomNavigationView // Bottom Navigation Bar'ın ID'sini buraya girin
+            params.anchorGravity = Gravity.TOP
+            params.gravity = Gravity.TOP
+            snackbar.view.layoutParams = params
+
+            snackbar.setAction("undo") {
+                viewModel.saveArticle(selectedArticle)
             }
+            snackbar.show()
+
+
         }
 
     }

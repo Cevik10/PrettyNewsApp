@@ -1,10 +1,12 @@
 package com.hakancevik.newsappbihaber.util
 
 import android.app.Activity
+import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.hakancevik.newsappbihaber.R
 
 

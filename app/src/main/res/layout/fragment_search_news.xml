@@ -20,6 +20,7 @@
         android:hint="@string/search_news_hint"
         android:inputType="textPersonName"
         android:minHeight="48dp"
+        android:fontFamily="@font/lato_regular"
         android:textColor="@color/colorPrimary"
         android:textColorHint="@color/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"

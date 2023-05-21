@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         runBlocking {
             installSplashScreen()
-            delay(3100)
+            delay(2600)
         }
 
         supportFragmentManager.fragmentFactory = fragmentFactory

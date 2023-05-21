@@ -95,7 +95,6 @@ class BreakingNewsFragment @Inject constructor(
 
             when (response) {
                 is Resource.Success -> {
-                    activity?.customToast("başarılı")
                     hideProgressBar()
                     viewModel.breakingNewsInfo.value = false
 
@@ -115,7 +114,6 @@ class BreakingNewsFragment @Inject constructor(
 
                 is Resource.Error -> {
                     hideProgressBar()
-                    activity?.customToast("api limit")
                     response.message?.let { message ->
                         Log.d(TAG, "error: $message")
                     }
